@@ -19,14 +19,85 @@ class AnimatedCartList extends StatefulWidget {
   State<AnimatedCartList> createState() => _AnimatedCartListState();
 }
 
-class _AnimatedCartListState extends State<AnimatedCartList> {
+class _AnimatedCartListState extends State<AnimatedCartList>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   late List<ProductItem> _items;
+  late AnimationController _emptyStateController;
+  late Animation<double> _emptyStateIconFadeAnimation;
+  late Animation<double> _emptyStateIconScaleAnimation;
+  late Animation<double> _emptyStateTitleFadeAnimation;
+  late Animation<double> _emptyStateTitleScaleAnimation;
+  late Animation<double> _emptyStateSubtitleFadeAnimation;
+  late Animation<double> _emptyStateSubtitleScaleAnimation;
 
   @override
   void initState() {
     super.initState();
     _items = List.from(widget.items);
+    _emptyStateController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    // Icon fade animation
+    _emptyStateIconFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _emptyStateController,
+        curve: const Interval(0.0, 0.4, curve: Curves.easeOut),
+      ),
+    );
+
+    // Icon scale animation
+    _emptyStateIconScaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _emptyStateController,
+        curve: const Interval(0.0, 0.4, curve: Curves.easeOut),
+      ),
+    );
+
+    // Title fade animation
+    _emptyStateTitleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _emptyStateController,
+        curve: const Interval(0.3, 0.6, curve: Curves.easeOut),
+      ),
+    );
+
+    // Title scale animation
+    _emptyStateTitleScaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _emptyStateController,
+        curve: const Interval(0.3, 0.6, curve: Curves.easeOut),
+      ),
+    );
+
+    // Subtitle fade animation
+    _emptyStateSubtitleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _emptyStateController,
+        curve: const Interval(0.5, 0.8, curve: Curves.easeOut),
+      ),
+    );
+
+    // Subtitle scale animation
+    _emptyStateSubtitleScaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _emptyStateController,
+        curve: const Interval(0.5, 0.8, curve: Curves.easeOut),
+      ),
+    );
+
+    // Start animation if empty on init
+    if (_items.isEmpty) {
+      _emptyStateController.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _emptyStateController.dispose();
+    super.dispose();
   }
 
   @override
@@ -35,8 +106,19 @@ class _AnimatedCartListState extends State<AnimatedCartList> {
 
     // Handle clearing all items
     if (widget.items.isEmpty && oldWidget.items.isNotEmpty) {
-      _removeAllItems(oldWidget.items);
+      _removeAllItems(oldWidget.items).then((_) {
+        // Start empty state animation after all items are removed
+        if (mounted && _items.isEmpty) {
+          _emptyStateController.reset();
+          _emptyStateController.forward();
+        }
+      });
       return;
+    }
+
+    // Handle transition from empty to having items
+    if (widget.items.isNotEmpty && oldWidget.items.isEmpty) {
+      _emptyStateController.reverse();
     }
 
     // Create maps for efficient lookup
@@ -84,6 +166,9 @@ class _AnimatedCartListState extends State<AnimatedCartList> {
 
   Future<void> _removeAllItems(List<ProductItem> oldItems) async {
     final indices = List.generate(oldItems.length, (index) => index).reversed;
+    final lastIndex = oldItems.length > 0 ? oldItems.length - 1 : 0;
+    // Calculate total time: delay for last item + animation duration
+    final totalDelay = (lastIndex * 50) + 300;
 
     for (final index in indices) {
       if (index < _items.length) {
@@ -105,6 +190,9 @@ class _AnimatedCartListState extends State<AnimatedCartList> {
         });
       }
     }
+
+    // Wait for all animations to complete
+    await Future.delayed(Duration(milliseconds: totalDelay));
   }
 
   void _removeItem(int index) {
@@ -169,22 +257,43 @@ class _AnimatedCartListState extends State<AnimatedCartList> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.shopping_cart_outlined,
-            size: 100,
-            color: AppColors.grey200,
+          // Animated icon with fade and scale
+          ScaleTransition(
+            scale: _emptyStateIconScaleAnimation,
+            child: FadeTransition(
+              opacity: _emptyStateIconFadeAnimation,
+              child: Icon(
+                Icons.shopping_cart_outlined,
+                size: 100,
+                color: AppColors.grey200,
+              ),
+            ),
           ),
           const SizedBox(height: 20),
-          Text(
-            'لا توجد عناصر في السلة',
-            style: TextStyle(fontSize: 20, color: AppColors.greyColor),
+          // Animated title with fade and scale
+          ScaleTransition(
+            scale: _emptyStateTitleScaleAnimation,
+            child: FadeTransition(
+              opacity: _emptyStateTitleFadeAnimation,
+              child: Text(
+                'لا توجد عناصر في السلة',
+                style: TextStyle(fontSize: 20, color: AppColors.greyColor),
+              ),
+            ),
           ),
           const SizedBox(height: 8),
-          Text(
-            'أضف بعض المنتجات لتراها هنا',
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.greyColor.withOpacity(0.7),
+          // Animated subtitle with fade and scale
+          ScaleTransition(
+            scale: _emptyStateSubtitleScaleAnimation,
+            child: FadeTransition(
+              opacity: _emptyStateSubtitleFadeAnimation,
+              child: Text(
+                'أضف بعض المنتجات لتراها هنا',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.greyColor.withOpacity(0.7),
+                ),
+              ),
             ),
           ),
         ],
