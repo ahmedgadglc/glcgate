@@ -68,9 +68,12 @@ class _CategoryFilterBarState extends State<CategoryFilterBar>
         tabs: widget.tabList
             .map((category) => Tab(text: category, height: 48))
             .toList(),
-        onTap: (index) => context
-            .read<ProductsCubit>()
-            .setSelectedFilter(widget.filterType, widget.tabList[index]),
+        onTap: (index) {
+          context.read<ProductsCubit>().setSelectedFilter(
+            widget.filterType,
+            widget.tabList[index],
+          );
+        },
       ),
     );
   }

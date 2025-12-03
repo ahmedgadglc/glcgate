@@ -23,7 +23,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   void initState() {
     super.initState();
-    // Fetch products when screen is initialized
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ProductsCubit>().fetchProducts();
     });
@@ -53,11 +52,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
       foregroundColor: Colors.white,
       elevation: 0,
       actions: [
-        // Show cart icon only on mobile
         if (Responsive.isMobile(context))
-          CartIconButton(
-            onPressed: () => _navigateToCart(context),
-          ),
+          CartIconButton(onPressed: () => _navigateToCart(context)),
       ],
     );
   }
@@ -65,9 +61,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   void _navigateToCart(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => const CartScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const CartScreen()),
     );
   }
 
@@ -99,8 +93,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
     );
   }
 
-  Widget _buildProductsContent(BuildContext context,
-      {required bool showAddProductView}) {
+  Widget _buildProductsContent(
+    BuildContext context, {
+    required bool showAddProductView,
+  }) {
     return BlocBuilder<ProductsCubit, ProductsState>(
       builder: (context, state) {
         if (state.errorMessage != null && !state.isLoading) {
@@ -110,9 +106,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Search bar
             const ProductSearchBar(),
-            // Category filter bars
             if (!state.isLoading) ...[
               if (state.categories1.isNotEmpty)
                 CategoryFilterBar(
@@ -128,9 +122,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
             // AddProductCardView for desktop/tablet (above product grid)
             if (showAddProductView) const AddProductCardView(),
             // Product grid
-            const Expanded(
-              child: ProductGrid(),
-            ),
+            const Expanded(child: ProductGrid()),
           ],
         );
       },
@@ -152,9 +144,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
             const SizedBox(height: 16),
             Text(
               errorMessage,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColors.errorColor,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(color: AppColors.errorColor),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),

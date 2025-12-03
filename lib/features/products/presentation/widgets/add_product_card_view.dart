@@ -35,17 +35,14 @@ class _AddProductCardViewState extends State<AddProductCardView> {
     return number.toStringAsFixed(2);
   }
 
-  /// Get unit text based on packing type and sellingUM
   String _getUnitText(ProductsState state) {
     final selectedProduct = context.read<ProductsCubit>().getSelectedProduct();
 
-    // Check if packing type contains "بستلة"
     if (state.selectedPackType != null &&
         state.selectedPackType!.contains('بستلة')) {
       return 'بستلة';
     }
 
-    // Check sellingUM
     if (selectedProduct?.sellingUM == "BX") {
       return 'كرتونة';
     }
