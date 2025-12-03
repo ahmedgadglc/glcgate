@@ -17,16 +17,15 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProductsCubit, ProductsState>(
       builder: (context, state) {
-        // Check if this item is in cart
-        final inCartItem = state.cartItems.firstWhere(
-          (cartItem) =>
-              cartItem.itemMainDescription == item.itemMainDescription,
-          orElse: () => item,
-        );
-        final isInCart = state.cartItems.any(
-          (cartItem) =>
-              cartItem.itemMainDescription == item.itemMainDescription,
-        );
+        // Check if this item is in cart and count distinct items
+        final matchingCartItems = state.cartItems
+            .where(
+              (cartItem) =>
+                  cartItem.itemMainDescription == item.itemMainDescription,
+            )
+            .toList();
+        final isInCart = matchingCartItems.isNotEmpty;
+        final itemCount = matchingCartItems.length;
 
         return Padding(
           padding: const EdgeInsets.all(4),
@@ -108,7 +107,7 @@ class ProductCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              (inCartItem.quantity ?? 0).toStringAsFixed(0),
+                              itemCount.toString(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 11,
