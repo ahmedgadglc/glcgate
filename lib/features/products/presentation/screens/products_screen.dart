@@ -20,11 +20,16 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
+  // GlobalKey for cart icon to track position for fly-to-cart animation
+  final GlobalKey _cartIconKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ProductsCubit>().fetchProducts();
+      // Store cart icon key in cubit for animation access
+      context.read<ProductsCubit>().setCartIconKey(_cartIconKey);
     });
   }
 
@@ -53,7 +58,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
       elevation: 0,
       actions: [
         if (Responsive.isMobile(context))
-          CartIconButton(onPressed: () => _navigateToCart(context)),
+          CartIconButton(
+            iconKey: _cartIconKey,
+            onPressed: () => _navigateToCart(context),
+          ),
       ],
     );
   }

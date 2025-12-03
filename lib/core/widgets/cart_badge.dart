@@ -105,6 +105,7 @@ class CartIconButton extends StatelessWidget {
   final Color? iconColor;
   final Color? badgeColor;
   final double iconSize;
+  final GlobalKey? iconKey;
 
   const CartIconButton({
     super.key,
@@ -112,11 +113,13 @@ class CartIconButton extends StatelessWidget {
     this.iconColor,
     this.badgeColor,
     this.iconSize = 24,
+    this.iconKey,
   });
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      key: iconKey,
       onPressed: onPressed,
       icon: CartBadge(
         badgeColor: badgeColor,
