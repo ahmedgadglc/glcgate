@@ -132,7 +132,7 @@ class ProductGrid extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryColor.withOpacity(0.1),
+                  color: AppColors.primaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -177,7 +177,7 @@ class ProductGrid extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: AppColors.grey200.withOpacity(0.5),
+                color: AppColors.grey200.withValues(alpha: 0.5),
                 shape: BoxShape.circle,
               ),
               child: Icon(
@@ -261,7 +261,7 @@ class ProductGrid extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: AppColors.grey200.withOpacity(0.5),
+              color: AppColors.grey200.withValues(alpha: 0.5),
               shape: BoxShape.circle,
             ),
             child: Icon(

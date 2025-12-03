@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'core/providers/cart_cubit.dart';
+import 'core/providers/cubit/cart_cubit.dart';
 import 'core/theme/themes.dart';
 import 'features/products/presentation/cubit/products_cubit.dart';
 import 'features/splash/splash_screen.dart';

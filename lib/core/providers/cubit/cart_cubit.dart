@@ -1,75 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glcgate/core/providers/cubit/cart_states.dart';
 
-import '../../features/products/data/models/product_item.dart';
-import 'cart_provider.dart';
+import '../../../features/products/data/models/product_item.dart';
+import '../cart_provider.dart';
 
-/// State class for CartCubit
-class CartState {
-  final int cartCount;
-  final List<ProductItem> cartItems;
-  final bool isLoading;
-  final double totalWeight;
-  final double totalAmount;
-  final double totalTax;
-  final String? note;
-  final int? selectedShipToID;
-  final String? shipToName;
-  final String? errorMessage;
-
-  CartState({
-    required this.cartCount,
-    required this.cartItems,
-    required this.isLoading,
-    this.totalWeight = 0,
-    this.totalAmount = 0,
-    this.totalTax = 0,
-    this.note,
-    this.selectedShipToID,
-    this.shipToName,
-    this.errorMessage,
-  });
-
-  factory CartState.initial() => CartState(
-    cartCount: 0,
-    cartItems: [],
-    isLoading: false,
-    totalWeight: 0,
-    totalAmount: 0,
-    totalTax: 0,
-  );
-
-  double get grandTotal => totalAmount + totalTax;
-
-  CartState copyWith({
-    int? cartCount,
-    List<ProductItem>? cartItems,
-    bool? isLoading,
-    double? totalWeight,
-    double? totalAmount,
-    double? totalTax,
-    String? note,
-    int? selectedShipToID,
-    String? shipToName,
-    String? errorMessage,
-  }) {
-    return CartState(
-      cartCount: cartCount ?? this.cartCount,
-      cartItems: cartItems ?? this.cartItems,
-      isLoading: isLoading ?? this.isLoading,
-      totalWeight: totalWeight ?? this.totalWeight,
-      totalAmount: totalAmount ?? this.totalAmount,
-      totalTax: totalTax ?? this.totalTax,
-      note: note ?? this.note,
-      selectedShipToID: selectedShipToID ?? this.selectedShipToID,
-      shipToName: shipToName ?? this.shipToName,
-      errorMessage: errorMessage,
-    );
-  }
-}
-
-/// BLoC version for cart management
-class CartCubit extends Cubit<CartState> {
-  CartCubit() : super(CartState.initial());
+class CartCubit extends Cubit<CartStates> {
+  CartCubit() : super(CartStates.initial());
 
   final CartProvider _cartProvider = CartProvider();
 
@@ -138,11 +74,6 @@ class CartCubit extends Cubit<CartState> {
     _syncStateWithProvider();
   }
 
-  /// Update shipping address
-  Future<void> updateShipTo(int? shipToID, String? shipToName) async {
-    await _cartProvider.updateShipTo(shipToID, shipToName);
-    _syncStateWithProvider();
-  }
 
   /// Check if item is in cart
   bool isInCart(int? itemID) {

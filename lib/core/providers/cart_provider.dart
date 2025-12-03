@@ -57,7 +57,6 @@ class CartProvider extends ChangeNotifier {
     );
 
     if (existingIndex != -1) {
-      // Update existing item
       final existingItem = _cartItems[existingIndex];
       final newQuantity = (existingItem.quantity ?? 0) + quantity;
       final updatedItem = existingItem.copyWith(quantity: newQuantity);
@@ -65,7 +64,6 @@ class CartProvider extends ChangeNotifier {
       updatedItem.calculateAmount();
       _cartItems[existingIndex] = updatedItem;
     } else {
-      // Add new item
       final newItem = item.copyWith(quantity: quantity);
       newItem.calculateWeight();
       newItem.calculateAmount();
@@ -124,15 +122,6 @@ class CartProvider extends ChangeNotifier {
   Future<void> updateNote(String note) async {
     _note = note;
     await StorageService.setCartNote(note);
-    notifyListeners();
-  }
-
-  /// Update shipping address
-  Future<void> updateShipTo(int? shipToID, String? shipToName) async {
-    _selectedShipToID = shipToID;
-    _shipToName = shipToName;
-    await StorageService.setShipToID(shipToID ?? 0);
-    await StorageService.setShipToName(shipToName ?? '');
     notifyListeners();
   }
 
