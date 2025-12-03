@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../features/products/presentation/cubit/products_cubit.dart';
 import '../theme/app_colors.dart';
 
-/// Simple cart badge widget that shows cart count on an icon
-class CartBadge extends StatelessWidget {
+/// Simple cart badge widget that shows cart count on an icon with animations
+class CartBadge extends StatefulWidget {
   final Widget child;
   final Color? badgeColor;
   final Color? textColor;
@@ -20,24 +20,79 @@ class CartBadge extends StatelessWidget {
   });
 
   @override
+  State<CartBadge> createState() => _CartBadgeState();
+}
+
+class _CartBadgeState extends State<CartBadge>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  int _previousCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.3,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _animateBadge() {
+    _controller.forward().then((_) {
+      _controller.reverse();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProductsCubit, ProductsState>(
+      buildWhen: (previous, current) =>
+          previous.cartItems.length != current.cartItems.length,
       builder: (context, state) {
         final cartCount = state.cartItems.length;
-        final shouldShow = showZero || cartCount > 0;
+        final shouldShow = widget.showZero || cartCount > 0;
 
-        return Badge(
-          label: Text(
-            cartCount > 99 ? '99+' : cartCount.toString(),
-            style: TextStyle(
-              color: textColor,
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          backgroundColor: badgeColor ?? AppColors.errorColor,
-          isLabelVisible: shouldShow,
-          child: child,
+        // Animate when count changes
+        if (cartCount != _previousCount && cartCount > _previousCount) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _animateBadge();
+          });
+          _previousCount = cartCount;
+        } else {
+          _previousCount = cartCount;
+        }
+
+        return AnimatedBuilder(
+          animation: _scaleAnimation,
+          builder: (context, child) {
+            return Transform.scale(
+              scale: _scaleAnimation.value,
+              child: Badge(
+                label: Text(
+                  cartCount > 99 ? '99+' : cartCount.toString(),
+                  style: TextStyle(
+                    color: widget.textColor,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                backgroundColor: widget.badgeColor ?? AppColors.errorColor,
+                isLabelVisible: shouldShow,
+                child: widget.child,
+              ),
+            );
+          },
         );
       },
     );
@@ -50,6 +105,7 @@ class CartIconButton extends StatelessWidget {
   final Color? iconColor;
   final Color? badgeColor;
   final double iconSize;
+  final GlobalKey? iconKey;
 
   const CartIconButton({
     super.key,
@@ -57,11 +113,13 @@ class CartIconButton extends StatelessWidget {
     this.iconColor,
     this.badgeColor,
     this.iconSize = 24,
+    this.iconKey,
   });
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      key: iconKey,
       onPressed: onPressed,
       icon: CartBadge(
         badgeColor: badgeColor,
@@ -92,10 +150,7 @@ class CartCountText extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProductsCubit, ProductsState>(
       builder: (context, state) {
-        return Text(
-          '$prefix${state.cartItems.length}$suffix',
-          style: style,
-        );
+        return Text('$prefix${state.cartItems.length}$suffix', style: style);
       },
     );
   }

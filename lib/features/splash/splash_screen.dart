@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:glcgate/core/animations/page_transitions.dart';
 import 'package:glcgate/features/products/presentation/screens/products_screen.dart';
 import 'package:glcgate/features/splash/widgets/splash_content_widget.dart';
 
@@ -17,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const ProductsScreen()),
+          FadePageRoute(child: const ProductsScreen()),
         );
       }
     });

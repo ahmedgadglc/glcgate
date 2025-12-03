@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glcgate/core/services/fly_to_cart_service.dart';
 import 'package:glcgate/core/theme/app_colors.dart';
 import 'package:glcgate/features/products/presentation/cubit/products_cubit.dart';
 import 'package:glcgate/features/products/presentation/widgets/packing_type_selector.dart';
@@ -15,6 +16,8 @@ class AddProductCardView extends StatefulWidget {
 class _AddProductCardViewState extends State<AddProductCardView> {
   late TextEditingController _controller;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // GlobalKey for product image to track position for fly-to-cart animation
+  final GlobalKey _productImageKey = GlobalKey();
 
   @override
   void initState() {
@@ -149,6 +152,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
           ),
         ),
         ProductImageCard(
+          key: _productImageKey,
           imageUrl: state.selectedItemMainDes?.uRL,
           itemMainDescription: state.selectedItemMainDes?.itemMainDescription,
           width: 220,
@@ -493,8 +497,26 @@ class _AddProductCardViewState extends State<AddProductCardView> {
 
     final quantity = double.tryParse(_controller.text);
     if (quantity != null && quantity > 0) {
-      context.read<ProductsCubit>().updateSelectedQuantity(quantity);
-      context.read<ProductsCubit>().addToCart();
+      final cubit = context.read<ProductsCubit>();
+      final state = cubit.state;
+      final imageUrl = state.selectedItemMainDes?.uRL;
+
+      cubit.updateSelectedQuantity(quantity);
+      cubit.addToCart();
+
+      // Trigger fly-to-cart animation
+      final cartIconKey = cubit.cartIconKey;
+      if (cartIconKey != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FlyToCartService.flyToCart(
+            context: context,
+            sourceKey: _productImageKey,
+            targetKey: cartIconKey,
+            imageUrl: imageUrl,
+          );
+        });
+      }
+
       // Reset form to clear validation errors
       _formKey.currentState!.reset();
       _controller.clear();

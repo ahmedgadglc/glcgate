@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glcgate/core/network/api_service.dart';
 import 'package:glcgate/core/services/storage_service.dart';
@@ -11,6 +12,17 @@ class ProductsCubit extends Cubit<ProductsState> {
   ProductsCubit() : super(ProductsState.initial());
 
   final ProductsRepository _repository = ProductsRepository();
+
+  // GlobalKey for cart icon to track position for fly-to-cart animation
+  GlobalKey? _cartIconKey;
+
+  /// Set the cart icon key for animation tracking
+  void setCartIconKey(GlobalKey key) {
+    _cartIconKey = key;
+  }
+
+  /// Get the cart icon key
+  GlobalKey? get cartIconKey => _cartIconKey;
 
   Future<void> fetchProducts([int versionNo = 0]) async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
@@ -66,11 +78,13 @@ class ProductsCubit extends Cubit<ProductsState> {
   void _setSelectedCategory1(String category) {
     // When "الكل" is selected, clear categories2 and show all products
     if (category == 'الكل') {
-      emit(state.copyWith(
-        selectedCategory1: 'الكل',
-        categories2: [],
-        selectedCategory2: null,
-      ));
+      emit(
+        state.copyWith(
+          selectedCategory1: 'الكل',
+          categories2: [],
+          selectedCategory2: null,
+        ),
+      );
       return;
     }
 
@@ -86,11 +100,13 @@ class ProductsCubit extends Cubit<ProductsState> {
       categories2.insert(0, 'الكل');
     }
 
-    emit(state.copyWith(
-      selectedCategory1: category,
-      categories2: categories2,
-      selectedCategory2: categories2.isNotEmpty ? 'الكل' : null,
-    ));
+    emit(
+      state.copyWith(
+        selectedCategory1: category,
+        categories2: categories2,
+        selectedCategory2: categories2.isNotEmpty ? 'الكل' : null,
+      ),
+    );
   }
 
   void _setSelectedCategory2(String category) {
@@ -100,11 +116,13 @@ class ProductsCubit extends Cubit<ProductsState> {
   // For backwards compatibility
   void selectCategory(String? category) {
     if (category == null || category == 'الكل') {
-      emit(state.copyWith(
-        selectedCategory1: 'الكل',
-        categories2: [],
-        selectedCategory2: null,
-      ));
+      emit(
+        state.copyWith(
+          selectedCategory1: 'الكل',
+          categories2: [],
+          selectedCategory2: null,
+        ),
+      );
     } else {
       _setSelectedCategory1(category);
     }
@@ -115,30 +133,34 @@ class ProductsCubit extends Cubit<ProductsState> {
   /// Set selected item by itemMainDescription - for AddProductCardView
   void setSelectItemMainDescription(ProductItem? item) {
     if (item == null) {
-      emit(state.copyWith(
-        clearSelectedItem: true,
-        packTypeList: [],
-        baseList: [],
-        colorList: [],
-        clearPackType: true,
-        clearBase: true,
-        clearColor: true,
-      ));
+      emit(
+        state.copyWith(
+          clearSelectedItem: true,
+          packTypeList: [],
+          baseList: [],
+          colorList: [],
+          clearPackType: true,
+          clearBase: true,
+          clearColor: true,
+        ),
+      );
       return;
     }
 
     // Get packing types for this item
     final packTypes = getPackingTypes(item.itemMainDescription);
 
-    emit(state.copyWith(
-      selectedItemMainDes: item.copyWith(quantity: 1),
-      packTypeList: packTypes,
-      baseList: [],
-      colorList: [],
-      selectedPackType: packTypes.isNotEmpty ? packTypes.first : null,
-      clearBase: true,
-      clearColor: true,
-    ));
+    emit(
+      state.copyWith(
+        selectedItemMainDes: item.copyWith(quantity: 1),
+        packTypeList: packTypes,
+        baseList: [],
+        colorList: [],
+        selectedPackType: packTypes.isNotEmpty ? packTypes.first : null,
+        clearBase: true,
+        clearColor: true,
+      ),
+    );
 
     // If only one packing type, auto-select and get bases
     if (packTypes.length == 1) {
@@ -170,13 +192,15 @@ class ProductsCubit extends Cubit<ProductsState> {
       packType,
     );
 
-    emit(state.copyWith(
-      selectedPackType: packType,
-      baseList: bases,
-      colorList: [],
-      selectedBase: bases.isNotEmpty ? bases.first : null,
-      clearColor: true,
-    ));
+    emit(
+      state.copyWith(
+        selectedPackType: packType,
+        baseList: bases,
+        colorList: [],
+        selectedBase: bases.isNotEmpty ? bases.first : null,
+        clearColor: true,
+      ),
+    );
 
     // If only one base, auto-select and get colors
     if (bases.length == 1) {
@@ -189,10 +213,7 @@ class ProductsCubit extends Cubit<ProductsState> {
         null,
       );
       if (colors.isNotEmpty) {
-        emit(state.copyWith(
-          colorList: colors,
-          selectedColor: colors.first,
-        ));
+        emit(state.copyWith(colorList: colors, selectedColor: colors.first));
         // Update selected item with the actual product
         _updateSelectedItemFromFilters();
       } else {
@@ -212,11 +233,13 @@ class ProductsCubit extends Cubit<ProductsState> {
       base,
     );
 
-    emit(state.copyWith(
-      selectedBase: base,
-      colorList: colors,
-      selectedColor: colors.isNotEmpty ? colors.first : null,
-    ));
+    emit(
+      state.copyWith(
+        selectedBase: base,
+        colorList: colors,
+        selectedColor: colors.isNotEmpty ? colors.first : null,
+      ),
+    );
 
     // If only one color, auto-select
     if (colors.length == 1) {
@@ -265,9 +288,11 @@ class ProductsCubit extends Cubit<ProductsState> {
     if (itemMainDescription == null) return [];
 
     return state.items
-        .where((item) =>
-            item.itemMainDescription == itemMainDescription &&
-            (packingType == null || item.packingType == packingType))
+        .where(
+          (item) =>
+              item.itemMainDescription == itemMainDescription &&
+              (packingType == null || item.packingType == packingType),
+        )
         .map((item) => item.base ?? '')
         .where((b) => b.isNotEmpty)
         .toSet()
@@ -283,10 +308,12 @@ class ProductsCubit extends Cubit<ProductsState> {
     if (itemMainDescription == null) return [];
 
     return state.items
-        .where((item) =>
-            item.itemMainDescription == itemMainDescription &&
-            (packingType == null || item.packingType == packingType) &&
-            (base == null || base.isEmpty || item.base == base))
+        .where(
+          (item) =>
+              item.itemMainDescription == itemMainDescription &&
+              (packingType == null || item.packingType == packingType) &&
+              (base == null || base.isEmpty || item.base == base),
+        )
         .map((item) => item.color ?? '')
         .where((c) => c.isNotEmpty)
         .toSet()
@@ -297,17 +324,19 @@ class ProductsCubit extends Cubit<ProductsState> {
   ProductItem? getSelectedProduct() {
     if (state.selectedItemMainDes == null) return null;
 
-    return state.items.firstWhereOrNull((item) =>
-        item.itemMainDescription ==
-            state.selectedItemMainDes!.itemMainDescription &&
-        (state.selectedPackType == null ||
-            item.packingType == state.selectedPackType) &&
-        (state.selectedBase == null ||
-            state.selectedBase!.isEmpty ||
-            item.base == state.selectedBase) &&
-        (state.selectedColor == null ||
-            state.selectedColor!.isEmpty ||
-            item.color == state.selectedColor));
+    return state.items.firstWhereOrNull(
+      (item) =>
+          item.itemMainDescription ==
+              state.selectedItemMainDes!.itemMainDescription &&
+          (state.selectedPackType == null ||
+              item.packingType == state.selectedPackType) &&
+          (state.selectedBase == null ||
+              state.selectedBase!.isEmpty ||
+              item.base == state.selectedBase) &&
+          (state.selectedColor == null ||
+              state.selectedColor!.isEmpty ||
+              item.color == state.selectedColor),
+    );
   }
 
   /// Update quantity for selected item
@@ -361,23 +390,24 @@ class ProductsCubit extends Cubit<ProductsState> {
       final resetItem = state.selectedItemMainDes!.copyWith(quantity: 0);
       resetItem.calculateWeight();
       resetItem.calculateAmount();
-      
-      emit(state.copyWith(
-        cartItems: updatedCart,
-        selectedItemMainDes: resetItem,
-      ));
+
+      emit(
+        state.copyWith(cartItems: updatedCart, selectedItemMainDes: resetItem),
+      );
     } else {
       // Clear selection for desktop
-      emit(state.copyWith(
-        cartItems: updatedCart,
-        clearSelectedItem: true,
-        packTypeList: [],
-        baseList: [],
-        colorList: [],
-        clearPackType: true,
-        clearBase: true,
-        clearColor: true,
-      ));
+      emit(
+        state.copyWith(
+          cartItems: updatedCart,
+          clearSelectedItem: true,
+          packTypeList: [],
+          baseList: [],
+          colorList: [],
+          clearPackType: true,
+          clearBase: true,
+          clearColor: true,
+        ),
+      );
     }
 
     _calculateTotals();
@@ -421,13 +451,15 @@ class ProductsCubit extends Cubit<ProductsState> {
   /// Clear all cart items
   Future<void> clearCart() async {
     await StorageService.saveCartList([]);
-    emit(state.copyWith(
-      cartItems: [],
-      totalAmount: 0,
-      gateTotalAmount: 0,
-      totalWeight: 0,
-      totalTax: 0,
-    ));
+    emit(
+      state.copyWith(
+        cartItems: [],
+        totalAmount: 0,
+        gateTotalAmount: 0,
+        totalWeight: 0,
+        totalTax: 0,
+      ),
+    );
   }
 
   /// Set cart note
@@ -452,12 +484,14 @@ class ProductsCubit extends Cubit<ProductsState> {
       totalWeight += item.wieght ?? 0;
     }
 
-    emit(state.copyWith(
-      totalAmount: totalAmount,
-      gateTotalAmount: gateTotalAmount,
-      totalWeight: totalWeight,
-      totalTax: 0, // TODO: Calculate tax if needed
-    ));
+    emit(
+      state.copyWith(
+        totalAmount: totalAmount,
+        gateTotalAmount: gateTotalAmount,
+        totalWeight: totalWeight,
+        totalTax: 0, // TODO: Calculate tax if needed
+      ),
+    );
   }
 
   /// Refresh cart from storage

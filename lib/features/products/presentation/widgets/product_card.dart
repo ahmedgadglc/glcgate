@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:glcgate/core/helper/responsive.dart';
@@ -7,34 +8,50 @@ import 'package:glcgate/features/products/presentation/cubit/products_cubit.dart
 import 'package:glcgate/features/products/presentation/widgets/bottom_sheet.dart';
 import 'package:glcgate/features/products/presentation/widgets/product_image_card.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   final ProductItem item;
   final int? index;
 
   const ProductCard({super.key, required this.item, this.index});
 
   @override
+  State<ProductCard> createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
+  bool _isHovered = false;
+
+  // Check if hover effects should be enabled (desktop/web only)
+  bool _shouldEnableHover(BuildContext context) {
+    return !Responsive.isMobile(context) || kIsWeb;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final shouldEnableHover = _shouldEnableHover(context);
+
     return BlocBuilder<ProductsCubit, ProductsState>(
       builder: (context, state) {
-        // Check if this item is in cart
-        final inCartItem = state.cartItems.firstWhere(
-          (cartItem) =>
-              cartItem.itemMainDescription == item.itemMainDescription,
-          orElse: () => item,
-        );
-        final isInCart = state.cartItems.any(
-          (cartItem) =>
-              cartItem.itemMainDescription == item.itemMainDescription,
-        );
+        // Check if this item is in cart and count distinct items
+        final matchingCartItems = state.cartItems
+            .where(
+              (cartItem) =>
+                  cartItem.itemMainDescription ==
+                  widget.item.itemMainDescription,
+            )
+            .toList();
+        final isInCart = matchingCartItems.isNotEmpty;
+        final itemCount = matchingCartItems.length;
 
-        return Padding(
+        Widget cardContent = Padding(
           padding: const EdgeInsets.all(4),
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
             onTap: () {
               // Set selected item for AddProductCardView
-              context.read<ProductsCubit>().setSelectItemMainDescription(item);
+              context.read<ProductsCubit>().setSelectItemMainDescription(
+                widget.item,
+              );
 
               // On mobile, show bottom sheet
               if (Responsive.isMobile(context)) {
@@ -58,10 +75,11 @@ class ProductCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Hero(
-                        tag: 'product-${item.itemCode ?? item.itemID}',
+                        tag:
+                            'product-${widget.item.itemCode ?? widget.item.itemID}',
                         child: ProductImageCard(
-                          imageUrl: item.uRL,
-                          itemMainDescription: item.itemMainDescription,
+                          imageUrl: widget.item.uRL,
+                          itemMainDescription: widget.item.itemMainDescription,
                           width: 120,
                           height: 120,
                         ),
@@ -70,12 +88,12 @@ class ProductCard extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: Text(
-                            item.itemMainDescription ?? '',
-                            style:
-                                Theme.of(context).textTheme.titleSmall?.copyWith(
-                                      color: AppColors.greyColor,
-                                      fontSize: 12,
-                                    ),
+                            widget.item.itemMainDescription ?? '',
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  color: AppColors.greyColor,
+                                  fontSize: 12,
+                                ),
                             maxLines: 2,
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
@@ -108,7 +126,7 @@ class ProductCard extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              (inCartItem.quantity ?? 0).toStringAsFixed(0),
+                              itemCount.toString(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 11,
@@ -124,6 +142,22 @@ class ProductCard extends StatelessWidget {
             ),
           ),
         );
+
+        // Wrap with hover detection and scale animation for desktop/web
+        if (shouldEnableHover) {
+          return MouseRegion(
+            onEnter: (_) => setState(() => _isHovered = true),
+            onExit: (_) => setState(() => _isHovered = false),
+            child: AnimatedScale(
+              scale: _isHovered ? 1.05 : 1.0,
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOutCubic,
+              child: cardContent,
+            ),
+          );
+        }
+
+        return cardContent;
       },
     );
   }
