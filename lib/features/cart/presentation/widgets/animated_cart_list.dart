@@ -41,17 +41,18 @@ class _AnimatedCartListState extends State<AnimatedCartList> {
 
     // Create maps for efficient lookup
     final oldItemsMap = {
-      for (ProductItem item in oldWidget.items) item.itemID: item
+      for (ProductItem item in oldWidget.items) item.itemID: item,
     };
     final newItemsMap = {
-      for (ProductItem item in widget.items) item.itemID: item
+      for (ProductItem item in widget.items) item.itemID: item,
     };
 
     // Handle removed items
     for (ProductItem oldItem in oldWidget.items) {
       if (!newItemsMap.containsKey(oldItem.itemID)) {
-        final index =
-            _items.indexWhere((item) => item.itemID == oldItem.itemID);
+        final index = _items.indexWhere(
+          (item) => item.itemID == oldItem.itemID,
+        );
         if (index != -1) {
           _removeItem(index);
         }
@@ -69,8 +70,9 @@ class _AnimatedCartListState extends State<AnimatedCartList> {
     for (ProductItem newItem in widget.items) {
       final oldItem = oldItemsMap[newItem.itemID];
       if (oldItem != null && oldItem.quantity != newItem.quantity) {
-        final index =
-            _items.indexWhere((item) => item.itemID == newItem.itemID);
+        final index = _items.indexWhere(
+          (item) => item.itemID == newItem.itemID,
+        );
         if (index != -1) {
           setState(() {
             _items[index] = newItem;
@@ -138,9 +140,7 @@ class _AnimatedCartListState extends State<AnimatedCartList> {
   @override
   Widget build(BuildContext context) {
     if (widget.isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_items.isEmpty) {
@@ -177,10 +177,7 @@ class _AnimatedCartListState extends State<AnimatedCartList> {
           const SizedBox(height: 20),
           Text(
             'لا توجد عناصر في السلة',
-            style: TextStyle(
-              fontSize: 20,
-              color: AppColors.greyColor,
-            ),
+            style: TextStyle(fontSize: 20, color: AppColors.greyColor),
           ),
           const SizedBox(height: 8),
           Text(
@@ -195,4 +192,3 @@ class _AnimatedCartListState extends State<AnimatedCartList> {
     );
   }
 }
-

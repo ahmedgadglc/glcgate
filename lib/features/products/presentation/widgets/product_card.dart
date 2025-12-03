@@ -71,11 +71,11 @@ class ProductCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: Text(
                             item.itemMainDescription ?? '',
-                            style:
-                                Theme.of(context).textTheme.titleSmall?.copyWith(
-                                      color: AppColors.greyColor,
-                                      fontSize: 12,
-                                    ),
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  color: AppColors.greyColor,
+                                  fontSize: 12,
+                                ),
                             maxLines: 2,
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,

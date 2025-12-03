@@ -34,6 +34,21 @@ class GlcGateApp extends StatelessWidget {
             child: child!,
           );
         },
+        // Custom page route builder for smooth transitions
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
+            case '/':
+              return MaterialPageRoute(
+                builder: (_) => const SplashScreen(),
+                settings: settings,
+              );
+            default:
+              return MaterialPageRoute(
+                builder: (_) => const SplashScreen(),
+                settings: settings,
+              );
+          }
+        },
       ),
     );
   }

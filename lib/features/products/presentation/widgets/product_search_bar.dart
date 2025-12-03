@@ -81,4 +81,3 @@ class _ProductSearchBarState extends State<ProductSearchBar> {
     );
   }
 }
-
