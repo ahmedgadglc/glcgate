@@ -9,7 +9,7 @@ import '../../../cart/presentation/widgets/drawer_cart.dart';
 import '../cubit/products_cubit.dart';
 import '../widgets/add_product_card_view.dart';
 import '../widgets/category_filter_bar.dart';
-import '../widgets/product_grid.dart';
+import '../widgets/product_grid/product_grid.dart';
 import '../widgets/product_search_bar.dart';
 
 class ProductsScreen extends StatefulWidget {

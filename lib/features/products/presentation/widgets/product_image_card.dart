@@ -28,8 +28,6 @@ class ProductImageCard extends StatelessWidget {
       return const Icon(Icons.image, color: Colors.grey, size: 50);
     }
 
-    // Calculate optimal cache dimensions for web performance
-    // Use device pixel ratio for crisp images without overloading
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
     final cacheWidth = kIsWeb
         ? (width * devicePixelRatio).round().clamp(100, 400)
@@ -44,17 +42,12 @@ class ProductImageCard extends StatelessWidget {
         width: width,
         height: height,
         fit: BoxFit.contain,
-        // Optimize memory cache for web
         memCacheWidth: cacheWidth,
         memCacheHeight: cacheHeight,
-        // Faster fade for better perceived performance
         fadeInDuration: const Duration(milliseconds: 200),
         fadeOutDuration: const Duration(milliseconds: 100),
-        // Prevent unnecessary reloads
         useOldImageOnUrlChange: true,
-        // Progressive loading indicator - handles both initial and loading states
         progressIndicatorBuilder: (context, url, progress) {
-          // Show skeleton during initial load (when progress value is null or 0)
           if (progress.progress == null || progress.progress == 0) {
             return Container(
               width: width,
@@ -77,7 +70,6 @@ class ProductImageCard extends StatelessWidget {
               ),
             );
           }
-          // Show progress indicator when download progress is available
           return Container(
             width: width,
             height: height,
