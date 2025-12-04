@@ -23,7 +23,7 @@ class CartFooter extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 5,
                 offset: const Offset(0, -2),
               ),
@@ -75,7 +75,7 @@ class CartFooter extends StatelessWidget {
                 ),
               ),
             ),
-            Icon(Icons.chevron_left, color: AppColors.greyColor),
+            Icon(Icons.chevron_right, color: AppColors.greyColor),
           ],
         ),
       ),
@@ -124,7 +124,7 @@ class CartFooter extends StatelessWidget {
 
   Widget _buildSummaryCards(BuildContext context, ProductsState state) {
     final grandTotal = state.totalAmount + state.totalTax;
-    
+
     return Container(
       height: 80,
       padding: const EdgeInsets.symmetric(horizontal: 8),
