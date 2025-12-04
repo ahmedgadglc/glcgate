@@ -511,7 +511,6 @@ class ProductsCubit extends Cubit<ProductsState> {
         .toSet()
         .toList();
     categories.sort();
-    // Add "الكل" (All) at the beginning like glcecho
     return ['الكل'] + categories;
   }
 
@@ -520,20 +519,16 @@ class ProductsCubit extends Cubit<ProductsState> {
     List<ProductItem> filtered = state.items;
 
     if (state.selectedCategory1 != null && state.selectedCategory1 != 'الكل') {
-      filtered = filtered
-          .where(
-            (item) => item.itemCategory1Description == state.selectedCategory1,
-          )
-          .toList();
+      filtered = filtered.where((item) {
+        return item.itemCategory1Description == state.selectedCategory1;
+      }).toList();
     }
 
     // Apply category2 filter if selected
     if (state.selectedCategory2 != null && state.selectedCategory2 != 'الكل') {
-      filtered = filtered
-          .where(
-            (item) => item.itemCategory2Description == state.selectedCategory2,
-          )
-          .toList();
+      filtered = filtered.where((item) {
+        return item.itemCategory2Description == state.selectedCategory2;
+      }).toList();
     }
 
     // Then apply search filter

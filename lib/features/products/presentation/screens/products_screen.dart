@@ -127,9 +127,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   filterType: CategoryFilterType.category2,
                 ),
             ],
-            // AddProductCardView for desktop/tablet (above product grid)
             if (showAddProductView) const AddProductCardView(),
-            // Product grid
             const Expanded(child: ProductGrid()),
           ],
         );

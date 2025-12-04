@@ -72,18 +72,18 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
   /// Get unit text based on packing type and sellingUM
   String _getUnitText(ProductsState state) {
     final selectedProduct = context.read<ProductsCubit>().getSelectedProduct();
-    
+
     // Check if packing type contains "بستلة"
-    if (state.selectedPackType != null && 
+    if (state.selectedPackType != null &&
         state.selectedPackType!.contains('بستلة')) {
       return 'بستلة';
     }
-    
+
     // Check sellingUM
     if (selectedProduct?.sellingUM == "BX") {
       return 'كرتونة';
     }
-    
+
     return 'عبوة';
   }
 
@@ -111,9 +111,9 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
 
   Widget _buildProductCard(BuildContext context, ProductsState state) {
     final labelStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
-          color: AppColors.grey,
-          fontWeight: FontWeight.normal,
-        );
+      color: AppColors.grey,
+      fontWeight: FontWeight.normal,
+    );
     final baseTypes = state.baseList;
     final colorTypes = state.colorList;
 
@@ -154,15 +154,15 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
   }
 
   Widget _buildTotalsSection(
-      BuildContext context, ProductsState state, int quantity,
-      {required ValueKey<int> key}) {
+    BuildContext context,
+    ProductsState state,
+    int quantity, {
+    required ValueKey<int> key,
+  }) {
     final boxDecoration = BoxDecoration(
       color: AppColors.grey.withAlpha(13),
       borderRadius: BorderRadius.circular(10),
-      border: Border.all(
-        color: AppColors.grey.withAlpha(26),
-        width: 1,
-      ),
+      border: Border.all(color: AppColors.grey.withAlpha(26), width: 1),
     );
 
     const labelStyle = TextStyle(
@@ -186,14 +186,15 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                 FittedBox(
                   child: Text(
                     _formatNumber(
-                        (state.selectedItemMainDes?.grossWeight ?? 0) *
-                            (state.selectedItemMainDes?.conversion ?? 1) *
-                            quantity),
+                      (state.selectedItemMainDes?.grossWeight ?? 0) *
+                          (state.selectedItemMainDes?.conversion ?? 1) *
+                          quantity,
+                    ),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: AppColors.grey,
-                          height: 1,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      color: AppColors.grey,
+                      height: 1,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const Text("كيلو جرام", style: labelStyle),
@@ -207,10 +208,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
             height: 60,
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
             decoration: boxDecoration.copyWith(
-              border: Border.all(
-                color: AppColors.grey.withAlpha(51),
-                width: 1,
-              ),
+              border: Border.all(color: AppColors.grey.withAlpha(51), width: 1),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -219,13 +217,14 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                 FittedBox(
                   child: Text(
                     _formatNumber(
-                        (state.selectedItemMainDes?.priceSellingUM ?? 0) *
-                            quantity),
+                      (state.selectedItemMainDes?.priceSellingUM ?? 0) *
+                          quantity,
+                    ),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: AppColors.errorColor,
-                          fontWeight: FontWeight.bold,
-                          height: 1,
-                        ),
+                      color: AppColors.errorColor,
+                      fontWeight: FontWeight.bold,
+                      height: 1,
+                    ),
                   ),
                 ),
                 const Text('جنيه', style: labelStyle),
@@ -238,7 +237,10 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
   }
 
   Widget _buildHeader(
-      BuildContext context, ProductsState state, TextStyle? labelStyle) {
+    BuildContext context,
+    ProductsState state,
+    TextStyle? labelStyle,
+  ) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       padding: const EdgeInsets.all(14),
@@ -261,16 +263,17 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
             ),
           ),
           const SizedBox(width: 16),
-          Expanded(
-            child: _buildDetailsSection(context, state, labelStyle),
-          ),
+          Expanded(child: _buildDetailsSection(context, state, labelStyle)),
         ],
       ),
     );
   }
 
   Widget _buildDetailsSection(
-      BuildContext context, ProductsState state, TextStyle? labelStyle) {
+    BuildContext context,
+    ProductsState state,
+    TextStyle? labelStyle,
+  ) {
     bool showDetails = state.selectedPackType != null;
 
     return Column(
@@ -286,10 +289,10 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
           child: Text(
             state.selectedItemMainDes?.itemCategory1Description ?? '',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppColors.infoColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+              color: AppColors.infoColor,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
         const SizedBox(height: 5),
@@ -304,9 +307,9 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
         Text(
           state.selectedItemMainDes?.itemCode ?? '',
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.grey,
-                fontWeight: FontWeight.normal,
-              ),
+            color: AppColors.grey,
+            fontWeight: FontWeight.normal,
+          ),
         ),
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
@@ -328,23 +331,26 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                     const SizedBox(height: 10),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 6, horizontal: 8),
+                        vertical: 6,
+                        horizontal: 8,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.attach_money_outlined,
-                              color: AppColors.errorColor.withAlpha(204),
-                              size: 18),
+                          Icon(
+                            Icons.attach_money_outlined,
+                            color: AppColors.errorColor.withAlpha(204),
+                            size: 18,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             _formatNumber(
-                                state.selectedItemMainDes?.priceSellingUM ?? 0),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
+                              state.selectedItemMainDes?.priceSellingUM ?? 0,
+                            ),
+                            style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(
                                   color: AppColors.errorColor,
                                   fontWeight: FontWeight.bold,
@@ -368,7 +374,9 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                     const SizedBox(height: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 6, horizontal: 8),
+                        vertical: 6,
+                        horizontal: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.grey.withAlpha(13),
                         borderRadius: BorderRadius.circular(8),
@@ -377,15 +385,17 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Icon(Icons.scale,
-                              color: AppColors.grey.withAlpha(204), size: 18),
+                          Icon(
+                            Icons.scale,
+                            color: AppColors.grey.withAlpha(204),
+                            size: 18,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             _formatNumber(
-                                state.selectedItemMainDes?.grossWeight ?? 0),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
+                              state.selectedItemMainDes?.grossWeight ?? 0,
+                            ),
+                            style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(
                                   color: AppColors.grey,
                                   fontWeight: FontWeight.w500,
@@ -410,7 +420,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                               "(${state.selectedItemMainDes?.conversion}x1)",
                               style: labelStyle?.copyWith(fontSize: 10),
                             ),
-                          ]
+                          ],
                         ],
                       ),
                     ),
@@ -461,8 +471,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                     child: Center(
                       child: Text(
                         'أدخل الكمية لعرض الإجمالي',
-                        style:
-                            TextStyle(color: AppColors.grey.withAlpha(179)),
+                        style: TextStyle(color: AppColors.grey.withAlpha(179)),
                       ),
                     ),
                   )
@@ -480,16 +489,15 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
               focusNode: _focusNode,
               controller: _controller,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               decoration: InputDecoration(
                 fillColor: AppColors.white,
                 filled: true,
                 labelText: 'الكمية',
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 16,
+                  horizontal: 16,
+                ),
                 suffixIcon: Container(
                   width: 50,
                   height: 55,
@@ -510,8 +518,10 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide:
-                      const BorderSide(color: AppColors.greyColor, width: 1.5),
+                  borderSide: const BorderSide(
+                    color: AppColors.greyColor,
+                    width: 1.5,
+                  ),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -519,14 +529,14 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide:
-                      const BorderSide(color: AppColors.errorColor, width: 1.5),
+                  borderSide: const BorderSide(
+                    color: AppColors.errorColor,
+                    width: 1.5,
+                  ),
                 ),
               ),
               keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               autovalidateMode: AutovalidateMode.disabled,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -555,18 +565,16 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
 
   void _addItemToCart(BuildContext context) {
     if (!_formKey.currentState!.validate()) return;
-    
+
     final quantity = double.tryParse(_controller.text);
     if (quantity != null && quantity > 0) {
       final cubit = context.read<ProductsCubit>();
       final state = cubit.state;
       final imageUrl = state.selectedItemMainDes?.uRL;
-      
+
       cubit.updateSelectedQuantity(quantity);
-      // Keep selection so user can add same item with different specs
-      // The quantity will be reset to 0 in addToCart, and the listener will update the controller
       cubit.addToCart(keepSelection: true);
-      
+
       // Trigger fly-to-cart animation
       final cartIconKey = cubit.cartIconKey;
       if (cartIconKey != null) {
@@ -579,10 +587,10 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
           );
         });
       }
-      
+
       // Reset form to clear validation errors
       _formKey.currentState!.reset();
-      
+
       // Show success snackbar
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -597,14 +605,15 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
           ),
         ),
       );
-      
+
       // Don't close sheet - user may want to add same item with different specs
       // The listener will automatically clear the quantity field when selectedItemMainDes.quantity becomes 0
     }
   }
 
   Widget _buildAddButton(BuildContext context, ProductsState state) {
-    final bool isEnabled = _controller.text.isNotEmpty &&
+    final bool isEnabled =
+        _controller.text.isNotEmpty &&
         int.tryParse(_controller.text) != null &&
         int.parse(_controller.text) > 0;
 
@@ -637,8 +646,9 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor:
-              isEnabled ? AppColors.primaryColor : AppColors.grey200,
+          backgroundColor: isEnabled
+              ? AppColors.primaryColor
+              : AppColors.grey200,
           foregroundColor: isEnabled ? Colors.white : AppColors.greyColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -657,4 +667,3 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
     super.dispose();
   }
 }
-

@@ -125,40 +125,47 @@ class _AddProductCardViewState extends State<AddProductCardView> {
     ProductsState state,
     TextStyle? labelStyle,
   ) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: [
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: () {
-                  context.read<ProductsCubit>().setSelectItemMainDescription(
-                    null,
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.errorColor,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  margin: const EdgeInsets.all(8),
-                  padding: const EdgeInsets.all(8.0),
-                  child: const Icon(Icons.clear, color: Colors.white),
-                ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Spacer(),
+            ProductImageCard(
+              key: _productImageKey,
+              imageUrl: state.selectedItemMainDes?.uRL,
+              itemMainDescription:
+                  state.selectedItemMainDes?.itemMainDescription,
+              width: 220,
+              height: 220,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 12.0),
+                child: _buildDetailsSection(context, state, labelStyle),
               ),
-            ],
+            ),
+          ],
+        ),
+
+        Positioned(
+          right: 0,
+          top: 0,
+          child: InkWell(
+            onTap: () {
+              context.read<ProductsCubit>().setSelectItemMainDescription(null);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.errorColor,
+                borderRadius: BorderRadius.circular(50),
+              ),
+              margin: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8.0),
+              child: const Icon(Icons.clear, color: Colors.white),
+            ),
           ),
         ),
-        ProductImageCard(
-          key: _productImageKey,
-          imageUrl: state.selectedItemMainDes?.uRL,
-          itemMainDescription: state.selectedItemMainDes?.itemMainDescription,
-          width: 220,
-          height: 220,
-        ),
-        Expanded(child: _buildDetailsSection(context, state, labelStyle)),
       ],
     );
   }
@@ -171,7 +178,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
     return SelectionArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             state.selectedItemMainDes?.itemCategory1Description ?? '',

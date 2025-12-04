@@ -21,7 +21,6 @@ class ProductCard extends StatefulWidget {
 class _ProductCardState extends State<ProductCard> {
   bool _isHovered = false;
 
-  // Check if hover effects should be enabled (desktop/web only)
   bool _shouldEnableHover(BuildContext context) {
     return !Responsive.isMobile(context) || kIsWeb;
   }
@@ -33,13 +32,11 @@ class _ProductCardState extends State<ProductCard> {
     return BlocBuilder<ProductsCubit, ProductsState>(
       builder: (context, state) {
         // Check if this item is in cart and count distinct items
-        final matchingCartItems = state.cartItems
-            .where(
-              (cartItem) =>
-                  cartItem.itemMainDescription ==
-                  widget.item.itemMainDescription,
-            )
-            .toList();
+        final matchingCartItems = state.cartItems.where((cartItem) {
+          return cartItem.itemMainDescription ==
+              widget.item.itemMainDescription;
+        }).toList();
+
         final isInCart = matchingCartItems.isNotEmpty;
         final itemCount = matchingCartItems.length;
 
@@ -58,21 +55,24 @@ class _ProductCardState extends State<ProductCard> {
                 showAddProductBottomSheet(context);
               }
             },
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: isInCart
-                    ? Border.all(
-                        color: AppColors.primaryColor.withAlpha(128),
-                        width: 2,
-                      )
-                    : null,
-              ),
-              child: Stack(
-                children: [
-                  Column(
+            child: Stack(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(top: 26),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: isInCart
+                        ? Border.all(
+                            color: AppColors.primaryColor.withAlpha(128),
+                            width: 2,
+                          )
+                        : null,
+                  ),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Hero(
                         tag:
@@ -102,43 +102,43 @@ class _ProductCardState extends State<ProductCard> {
                       ),
                     ],
                   ),
-                  // Cart badge
-                  if (isInCart)
-                    Positioned(
-                      top: 4,
-                      left: 4,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.shopping_cart,
-                              size: 12,
+                ),
+                // Cart badge
+                if (isInCart)
+                  Positioned(
+                    top: 4,
+                    left: 4,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.shopping_cart,
+                            size: 12,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            itemCount.toString(),
+                            style: const TextStyle(
                               color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
                             ),
-                            const SizedBox(width: 4),
-                            Text(
-                              itemCount.toString(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
           ),
         );

@@ -232,9 +232,9 @@ class ProductGrid extends StatelessWidget {
   double _getCardHeight(BuildContext context) {
     final screenType = Responsive.getScreenType(context);
     return switch (screenType) {
-      ScreenType.desktop => 220.0,
+      ScreenType.desktop => 180.0,
       ScreenType.tablet => 210.0,
-      ScreenType.mobile => 200.0,
+      ScreenType.mobile => 170.0,
     };
   }
 }

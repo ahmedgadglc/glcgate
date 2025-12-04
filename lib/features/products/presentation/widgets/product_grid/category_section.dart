@@ -22,8 +22,10 @@ class CategorySection extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.fromLTRB(
-            padding.left + 8, 16,
-            padding.right + 8, 8,
+            padding.left + 8,
+            16,
+            padding.right + 8,
+            8,
           ),
           child: Row(
             children: [
@@ -109,13 +111,13 @@ class CategorySection extends StatelessWidget {
 
   /// Calculate responsive grid columns based on screen width
   int _getGridColumns(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.sizeOf(context).width;
     final screenType = Responsive.getScreenType(context);
 
     // For tablet/desktop with drawer, account for drawer width
     final effectiveWidth = switch (screenType) {
-      ScreenType.desktop => width - 400, // 400px drawer
-      ScreenType.tablet => width - 350, // 350px drawer
+      ScreenType.desktop => width - 400,
+      ScreenType.tablet => width - 350,
       ScreenType.mobile => width,
     };
 
@@ -127,16 +129,16 @@ class CategorySection extends StatelessWidget {
     };
 
     final columns = (effectiveWidth / cardWidth).floor();
-    return columns.clamp(2, 8); // Min 2, Max 8 columns
+    return columns.clamp(3, 8);
   }
 
   /// Get card height based on screen size
   double _getCardHeight(BuildContext context) {
     final screenType = Responsive.getScreenType(context);
     return switch (screenType) {
-      ScreenType.desktop => 220.0,
+      ScreenType.desktop => 190.0,
       ScreenType.tablet => 210.0,
-      ScreenType.mobile => 200.0,
+      ScreenType.mobile => 205.0,
     };
   }
 }
