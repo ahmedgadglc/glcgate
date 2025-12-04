@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/helper/app_function.dart';
@@ -413,7 +414,9 @@ class _QuantityControlsState extends State<_QuantityControls> {
       },
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
+          border: Border.all(
+            color: _isEditing ? AppColors.primaryColor : Colors.grey.shade300,
+          ),
           borderRadius: BorderRadius.circular(8),
         ),
         width: 50,
@@ -426,11 +429,14 @@ class _QuantityControlsState extends State<_QuantityControls> {
                 autofocus: true,
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 onChanged: _handleQuantityChange,
                 onFieldSubmitted: (_) => _saveQuantity(),
                 onEditingComplete: _saveQuantity,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
                   isDense: true,
                   contentPadding: EdgeInsets.zero,
                 ),
