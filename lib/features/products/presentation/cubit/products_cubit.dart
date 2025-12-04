@@ -76,7 +76,6 @@ class ProductsCubit extends Cubit<ProductsState> {
   }
 
   void _setSelectedCategory1(String category) {
-    // When "الكل" is selected, clear categories2 and show all products
     if (category == 'الكل') {
       emit(
         state.copyWith(
@@ -90,9 +89,11 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     // Get categories2 based on selected category1
     final List<String> categories2 = state.items
-        .where((element) => element.itemCategory1Description == category)
-        .map((e) => e.itemCategory2Description ?? '')
-        .where((e) => e.isNotEmpty)
+        .where((productItem) {
+          return productItem.itemCategory1Description == category;
+        })
+        .map((productItem) => productItem.itemCategory2Description ?? '')
+        .where((category2) => category2.isNotEmpty)
         .toSet()
         .toList();
 
