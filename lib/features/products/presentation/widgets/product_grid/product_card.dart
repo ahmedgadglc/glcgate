@@ -58,7 +58,7 @@ class _ProductCardState extends State<ProductCard> {
             child: Stack(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 26),
+                  padding: EdgeInsets.only(top: 30),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(12),
