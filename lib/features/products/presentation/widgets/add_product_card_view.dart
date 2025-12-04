@@ -64,19 +64,26 @@ class _AddProductCardViewState extends State<AddProductCardView> {
         }
       },
       builder: (context, state) {
+        final cardKey = state.selectedItemMainDes?.itemCode ?? 'empty';
+
         return AnimatedSize(
           duration: const Duration(milliseconds: 500),
           reverseDuration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
+          clipBehavior: Clip.none,
           child: state.selectedItemMainDes == null
-              ? const SizedBox.shrink()
-              : _buildProductCard(context, state),
+              ? const SizedBox.shrink(key: ValueKey('empty'))
+              : _buildProductCard(context, state, key: ValueKey(cardKey)),
         );
       },
     );
   }
 
-  Widget _buildProductCard(BuildContext context, ProductsState state) {
+  Widget _buildProductCard(
+    BuildContext context,
+    ProductsState state, {
+    Key? key,
+  }) {
     final labelStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
       color: AppColors.grey,
       fontWeight: FontWeight.normal,
@@ -85,6 +92,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
     final colorTypes = state.colorList;
 
     return Container(
+      key: key,
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(16),
       width: double.infinity,
@@ -101,8 +109,62 @@ class _AddProductCardViewState extends State<AddProductCardView> {
           _buildHeader(context, state, labelStyle),
           const PackingTypeSelector(),
           const SizedBox(height: 10),
-          if (baseTypes.isNotEmpty) const BaseTypeSelector(),
-          if (colorTypes.isNotEmpty) const ColorsTypeSelector(),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position:
+                        Tween<Offset>(
+                          begin: const Offset(0, -0.3),
+                          end: Offset.zero,
+                        ).animate(
+                          CurvedAnimation(
+                            parent: animation,
+                            curve: Curves.easeOut,
+                          ),
+                        ),
+                    child: child,
+                  ),
+                );
+              },
+              child: baseTypes.isNotEmpty
+                  ? const BaseTypeSelector(key: ValueKey('baseTypeSelector'))
+                  : const SizedBox.shrink(key: ValueKey('empty')),
+            ),
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position:
+                        Tween<Offset>(
+                          begin: const Offset(0, -0.3),
+                          end: Offset.zero,
+                        ).animate(
+                          CurvedAnimation(
+                            parent: animation,
+                            curve: Curves.easeOut,
+                          ),
+                        ),
+                    child: child,
+                  ),
+                );
+              },
+              child: colorTypes.isNotEmpty
+                  ? const ColorsTypeSelector(key: ValueKey('colorTypeSelector'))
+                  : const SizedBox.shrink(key: ValueKey('empty')),
+            ),
+          ),
           const SizedBox(height: 20),
           if (state.selectedPackType != null &&
               (state.selectedBase != null ||

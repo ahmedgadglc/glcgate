@@ -65,7 +65,7 @@ class CartFooter extends StatelessWidget {
               child: Text(
                 state.note?.isNotEmpty == true
                     ? state.note!
-                    : 'اضغط لإضافة ملاحظات...',
+                    : 'اضغط لإضافة ملاحظات...', 
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: TextStyle(
