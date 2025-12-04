@@ -136,7 +136,7 @@ class CategorySection extends StatelessWidget {
   double _getCardHeight(BuildContext context) {
     final screenType = Responsive.getScreenType(context);
     return switch (screenType) {
-      ScreenType.desktop => 215.0,
+      ScreenType.desktop => 235.0,
       ScreenType.tablet => 210.0,
       ScreenType.mobile => 205.0,
     };

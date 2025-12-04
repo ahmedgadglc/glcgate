@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glcgate/core/extensions/responsive_extension.dart';
 import 'package:glcgate/core/helper/responsive.dart';
 import 'package:glcgate/core/theme/app_colors.dart';
 import 'package:glcgate/features/products/data/models/product_item.dart';
@@ -80,8 +81,8 @@ class _ProductCardState extends State<ProductCard> {
                         child: ProductImageCard(
                           imageUrl: widget.item.uRL,
                           itemMainDescription: widget.item.itemMainDescription,
-                          width: 120,
-                          height: 120,
+                          width: context.isDesktop ? 142 : 120,
+                          height: context.isDesktop ? 142 : 120,
                         ),
                       ),
                       Expanded(
@@ -92,7 +93,7 @@ class _ProductCardState extends State<ProductCard> {
                             style: Theme.of(context).textTheme.titleSmall
                                 ?.copyWith(
                                   color: AppColors.greyColor,
-                                  fontSize: 12,
+                                  fontSize: 14,
                                 ),
                             maxLines: 2,
                             textAlign: TextAlign.center,
