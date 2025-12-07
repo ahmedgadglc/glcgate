@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:glcgate/core/animations/page_transitions.dart';
+import 'package:glcgate/core/helper/responsive.dart';
 import 'package:glcgate/core/theme/app_colors.dart';
 import 'package:glcgate/core/widgets/glc_logo.dart';
+import 'package:glcgate/core/widgets/animated_glc_logo.dart';
 import 'package:glcgate/features/auth/presentation/widgets/animated_button.dart';
 import 'package:glcgate/features/auth/presentation/widgets/password_field.dart';
 import 'package:glcgate/features/auth/presentation/widgets/username_field.dart';
@@ -60,22 +62,76 @@ class _LoginFormSectionState extends State<LoginFormSection> {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = Responsive.isDesktop(context);
+
+    if (isDesktop) {
+      // Desktop layout: Row with logo on left, form on right
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Left side - Animated Logo
+          Expanded(
+            flex: 4,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const AnimatedGlcLogo(width: 250),
+                  const SizedBox(height: 24),
+                  Text(
+                    'مرحباً بك في GLC Gate',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.greyDark,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Vertical divider
+          Container(
+            width: 1,
+            height: 300,
+            color: AppColors.grey200,
+            margin: const EdgeInsets.symmetric(horizontal: 32),
+          ),
+
+          // Right side - Form Fields
+          Expanded(flex: 6, child: _buildFormFields(context)),
+        ],
+      );
+    } else {
+      // Mobile/Tablet layout: Vertical with logo at top
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Logo
+          const LogoGLC(width: 120)
+              .animate()
+              .fadeIn(duration: 400.ms)
+              .scale(
+                begin: const Offset(0.5, 0.5),
+                end: const Offset(0.7, 0.7),
+                duration: 400.ms,
+                curve: Curves.easeOut,
+              ),
+          const SizedBox(height: 32),
+          _buildFormFields(context),
+        ],
+      );
+    }
+  }
+
+  Widget _buildFormFields(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Logo
-        const LogoGLC(width: 120)
-            .animate()
-            .fadeIn(duration: 400.ms)
-            .scale(
-              begin: const Offset(0.5, 0.5),
-              end: const Offset(0.7, 0.7),
-              duration: 400.ms,
-              curve: Curves.easeOut,
-            ),
-        const SizedBox(height: 32),
-
         // Title
         Text(
               'تسجيل الدخول',
@@ -178,7 +234,7 @@ class _LoginFormSectionState extends State<LoginFormSection> {
         // Login Button
         AnimatedButton(
               text: 'تسجيل الدخول',
-              icon: Iconsax.login_1_copy,
+              icon: Iconsax.login_copy,
               isLoading: _isLoading,
               onPressed: _isLoading ? null : _handleLogin,
             )

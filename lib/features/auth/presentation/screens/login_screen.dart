@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:glcgate/core/helper/responsive.dart';
-import 'package:glcgate/core/widgets/glc_logo.dart';
 import 'package:glcgate/features/auth/presentation/widgets/animated_background.dart';
 import 'package:glcgate/features/auth/presentation/widgets/glassmorphic_card.dart';
 import 'package:glcgate/features/auth/presentation/widgets/login_form_section.dart';
@@ -60,13 +59,13 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildDesktopLayout(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(40),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 500),
+          constraints: const BoxConstraints(maxWidth: 1000),
           child: GlassmorphicCard(
             padding: const EdgeInsets.all(48),
             child: _buildContent(),
