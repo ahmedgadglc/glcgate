@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/providers/cubit/cart_cubit.dart';
 import 'core/theme/themes.dart';
+import 'features/auth/presentation/screens/login_screen.dart';
 import 'features/products/presentation/cubit/products_cubit.dart';
 import 'features/splash/splash_screen.dart';
 
@@ -39,6 +40,11 @@ class GlcGateApp extends StatelessWidget {
             case '/':
               return MaterialPageRoute(
                 builder: (_) => const SplashScreen(),
+                settings: settings,
+              );
+            case '/login':
+              return MaterialPageRoute(
+                builder: (_) => const LoginScreen(),
                 settings: settings,
               );
             default:
