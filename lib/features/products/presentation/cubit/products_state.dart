@@ -155,6 +155,7 @@ class ProductsState {
       note: note ?? this.note,
     );
   }
+
 }
 
 enum CategoryFilterType { category1, category2 }

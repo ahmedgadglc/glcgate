@@ -60,16 +60,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
         if (Responsive.isMobile(context))
           CartIconButton(
             iconKey: _cartIconKey,
-            onPressed: () => _navigateToCart(context),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CartScreen()),
+              );
+            },
           ),
       ],
-    );
-  }
-
-  void _navigateToCart(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const CartScreen()),
     );
   }
 

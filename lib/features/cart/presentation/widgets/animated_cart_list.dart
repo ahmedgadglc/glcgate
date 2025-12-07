@@ -65,28 +65,31 @@ class _AnimatedCartListState extends State<AnimatedCartList>
     );
 
     // Title scale animation
-    _emptyStateTitleScaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _emptyStateController,
-        curve: const Interval(0.3, 0.6, curve: Curves.easeOut),
-      ),
-    );
+    _emptyStateTitleScaleAnimation = Tween<double>(begin: 0.8, end: 1.0)
+        .animate(
+          CurvedAnimation(
+            parent: _emptyStateController,
+            curve: const Interval(0.3, 0.6, curve: Curves.easeOut),
+          ),
+        );
 
     // Subtitle fade animation
-    _emptyStateSubtitleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _emptyStateController,
-        curve: const Interval(0.5, 0.8, curve: Curves.easeOut),
-      ),
-    );
+    _emptyStateSubtitleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0)
+        .animate(
+          CurvedAnimation(
+            parent: _emptyStateController,
+            curve: const Interval(0.5, 0.8, curve: Curves.easeOut),
+          ),
+        );
 
     // Subtitle scale animation
-    _emptyStateSubtitleScaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _emptyStateController,
-        curve: const Interval(0.5, 0.8, curve: Curves.easeOut),
-      ),
-    );
+    _emptyStateSubtitleScaleAnimation = Tween<double>(begin: 0.8, end: 1.0)
+        .animate(
+          CurvedAnimation(
+            parent: _emptyStateController,
+            curve: const Interval(0.5, 0.8, curve: Curves.easeOut),
+          ),
+        );
 
     // Start animation if empty on init
     if (_items.isEmpty) {
@@ -291,7 +294,7 @@ class _AnimatedCartListState extends State<AnimatedCartList>
                 'أضف بعض المنتجات لتراها هنا',
                 style: TextStyle(
                   fontSize: 14,
-                  color: AppColors.greyColor.withOpacity(0.7),
+                  color: AppColors.greyColor.withValues(alpha: 0.7),
                 ),
               ),
             ),

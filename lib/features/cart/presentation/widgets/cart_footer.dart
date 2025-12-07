@@ -6,9 +6,8 @@ import '../../../products/presentation/cubit/products_cubit.dart';
 
 class CartFooter extends StatelessWidget {
   final VoidCallback? onCheckout;
-  final VoidCallback? onClearCart;
 
-  const CartFooter({super.key, this.onCheckout, this.onClearCart});
+  const CartFooter({super.key, this.onCheckout});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class CartFooter extends StatelessWidget {
               child: Text(
                 state.note?.isNotEmpty == true
                     ? state.note!
-                    : 'اضغط لإضافة ملاحظات...', 
+                    : 'اضغط لإضافة ملاحظات...',
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: TextStyle(

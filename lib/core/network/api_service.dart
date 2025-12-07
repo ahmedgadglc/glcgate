@@ -140,7 +140,7 @@ class ApiResponse {
     List<Version> versions = [];
     if (jsonResponse['List0'] != null) {
       versions = (jsonResponse['List0'] as List)
-          .map((e) => Version.fromJson(e))
+          .map((version) => Version.fromJson(version))
           .toList();
     }
 
