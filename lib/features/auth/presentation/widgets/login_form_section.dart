@@ -182,12 +182,6 @@ class _LoginFormSectionState extends State<LoginFormSection> {
         PasswordField(
               controller: _passwordController,
               focusNode: _passwordFocusNode,
-              // errorText:
-              //     state.status == AuthStatus.error &&
-              //         state.errorMessage != null &&
-              //         _usernameController.text.isNotEmpty
-              //     ? null // Only show error on username field
-              //     : null,
               onChanged: (value) {
                 // context.read<AuthCubit>().clearError();
               },
