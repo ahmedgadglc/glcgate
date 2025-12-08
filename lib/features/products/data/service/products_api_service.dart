@@ -2,7 +2,7 @@ import 'package:glcgate/core/network/api_service.dart';
 import 'package:glcgate/features/products/data/models/product_item.dart';
 
 class ProductsApiService extends ApiService {
-  static const String operation = 'ItemMaster';
+  static const String operation = 'Get Item Master';
 
   // Set user mobile number for authentication
   // This should be set after login or from stored credentials
@@ -15,7 +15,7 @@ class ProductsApiService extends ApiService {
   // TODO: Remove this when login system is implemented
   ProductsApiService() {
     // Test mobile number - remove spaces
-    userMobileNo = '01158356590';
+    userMobileNo = 'mhd';
   }
 
   Future<List<ProductItem>> fetchProducts({int versionNo = 0}) async {
@@ -26,8 +26,7 @@ class ProductsApiService extends ApiService {
     if (response == null || response.hasError) {
       throw ApiException(response?.errorMessage ?? 'فشل في جلب المنتجات');
     }
-
-    final List<dynamic>? itemsList = response.data['List1'];
+    final List<dynamic>? itemsList = response.data['List0'];
 
     if (itemsList == null) {
       return [];

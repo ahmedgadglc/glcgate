@@ -31,7 +31,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
     super.dispose();
   }
 
-  String _formatNumber(double number) {
+  String _formatNumber(int number) {
     if (number == number.toInt()) {
       return number.toInt().toString();
     }
@@ -195,9 +195,8 @@ class _AddProductCardViewState extends State<AddProductCardView> {
             Spacer(),
             ProductImageCard(
               key: _productImageKey,
-              imageUrl: state.selectedItemMainDes?.uRL,
-              itemMainDescription:
-                  state.selectedItemMainDes?.itemMainDescription,
+              imageUrl: state.selectedItemMainDes?.itemURL,
+              productDescription: state.selectedItemMainDes?.productDescription,
               width: 220,
               height: 220,
             ),
@@ -215,7 +214,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
           top: 0,
           child: InkWell(
             onTap: () {
-              context.read<ProductsCubit>().setSelectItemMainDescription(null);
+              context.read<ProductsCubit>().setSelectproductDescription(null);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -243,7 +242,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            state.selectedItemMainDes?.itemCategory1Description ?? '',
+            state.selectedItemMainDes?.itemCategoryDescription1 ?? '',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: AppColors.primaryColor,
               fontWeight: FontWeight.bold,
@@ -251,7 +250,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
           ),
           const SizedBox(height: 5),
           Text(
-            state.selectedItemMainDes?.itemMainDescription ?? '',
+            state.selectedItemMainDes?.productDescription ?? '',
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
               color: AppColors.grey,
               fontWeight: FontWeight.normal,
@@ -287,7 +286,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
                         children: [
                           Text(
                             _formatNumber(
-                              state.selectedItemMainDes?.priceSellingUM ?? 0,
+                              state.selectedItemMainDes?.conversion ?? 0,
                             ),
                             style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(
@@ -537,7 +536,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
                 const SizedBox(height: 1),
                 Text(
                   _formatNumber(
-                    (state.selectedItemMainDes?.priceSellingUM ?? 0) * quantity,
+                    (state.selectedItemMainDes?.conversion ?? 0) * quantity,
                   ),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: AppColors.errorColor,
@@ -568,7 +567,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
     if (quantity != null && quantity > 0) {
       final cubit = context.read<ProductsCubit>();
       final state = cubit.state;
-      final imageUrl = state.selectedItemMainDes?.uRL;
+      final imageUrl = state.selectedItemMainDes?.itemURL;
 
       cubit.updateSelectedQuantity(quantity);
       cubit.addToCart();

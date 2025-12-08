@@ -5,28 +5,28 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductImageCard extends StatelessWidget {
   final String? imageUrl;
-  final String? itemMainDescription;
+  final String? productDescription;
   final double width;
   final double height;
 
   const ProductImageCard({
     super.key,
     required this.imageUrl,
-    required this.itemMainDescription,
+    required this.productDescription,
     this.width = 150,
     this.height = 150,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool isValidUrl =
-        imageUrl != null &&
-        imageUrl!.isNotEmpty &&
-        Uri.tryParse(imageUrl!)?.hasAbsolutePath == true;
+    // final bool isValidUrl =
+    //     imageUrl != null &&
+    //     imageUrl!.isNotEmpty &&
+    //     Uri.tryParse(imageUrl!)?.hasAbsolutePath == true;
 
-    if (!isValidUrl) {
-      return const Icon(Icons.image, color: Colors.grey, size: 50);
-    }
+    // if (!isValidUrl) {
+    //   return const Icon(Icons.image, color: Colors.grey, size: 50);
+    // }
 
     final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
     final cacheWidth = kIsWeb

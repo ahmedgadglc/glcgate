@@ -14,8 +14,8 @@ class ApiService {
 
   // Base URL - should be configured based on environment
   static const String baseUrl =
-      'https://echo.glcpaints.com:7011/General/GeneralAPI';
-  static const String spName = '[APIGeneralEchoOperation]';
+      'https://echo.glcpaints.com:7781/GeneralAPI/DynamicDatabase';
+  static const String spName = 'APIGateOperation';
 
   // User mobile number - can be set from login or left null for public access
   String? userMobileNo;
@@ -102,6 +102,8 @@ class ApiService {
       'AppVersionDesktop': '1',
       'FireBaseToken': '', // Can be set later if needed
       'PlatForm': kIsWeb ? 'web' : Platform.operatingSystem,
+      "DatabaseIP": "45.32.255.109",
+      "DatabaseName": "Gate",
     };
 
     // Build base data with User field
@@ -146,7 +148,7 @@ class ApiResponse {
 
     final Map<String, dynamic> data = {};
     jsonResponse.forEach((key, value) {
-      if (key.startsWith('List') && key != 'List0') {
+      if (key.startsWith('List')) {
         data[key] = value ?? [];
       }
     });

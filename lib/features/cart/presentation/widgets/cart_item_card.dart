@@ -32,8 +32,8 @@ class CartItemCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ProductImageCard(
-              itemMainDescription: item.itemMainDescription ?? '',
-              imageUrl: item.uRL,
+              productDescription: item.productDescription ?? '',
+              imageUrl: item.itemURL,
               width: 100,
               height: 100,
             ),
@@ -64,7 +64,7 @@ class _ProductDetails extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                item.itemCategory1Description ?? '',
+                item.itemCategoryDescription1 ?? '',
                 style: Theme.of(
                   context,
                 ).textTheme.labelSmall?.copyWith(color: AppColors.infoColor),
@@ -85,7 +85,7 @@ class _ProductDetails extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.itemMainDescription ?? '',
+                    item.productDescription ?? '',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: AppColors.greyColor,
                     ),
@@ -145,7 +145,7 @@ class _DeleteButton extends StatelessWidget {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('حذف المنتج'),
-        content: Text('هل تريد حذف "${item.itemMainDescription}" من السلة؟'),
+        content: Text('هل تريد حذف "${item.productDescription}" من السلة؟'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -177,10 +177,11 @@ class _ProductTags extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        if (item.packingType != null && item.packingType!.isNotEmpty)
+        if (item.packingDescription != null &&
+            item.packingDescription!.isNotEmpty)
           _buildTag(
             context,
-            item.packingType!,
+            item.packingDescription!,
             Colors.grey[300]!,
             AppColors.greyColor,
           ),
