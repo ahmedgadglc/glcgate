@@ -62,7 +62,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
     }
   }
 
-  String _formatNumber(double number) {
+  String _formatNumber(int number) {
     if (number == number.toInt()) {
       return number.toInt().toString();
     }
@@ -217,8 +217,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                 FittedBox(
                   child: Text(
                     _formatNumber(
-                      (state.selectedItemMainDes?.priceSellingUM ?? 0) *
-                          quantity,
+                      (state.selectedItemMainDes?.conversion ?? 0) * quantity,
                     ),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: AppColors.errorColor,
@@ -255,9 +254,9 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
             tag: 'product-${state.selectedItemMainDes?.itemCode ?? "image"}',
             child: ProductImageCard(
               key: _productImageKey,
-              imageUrl: state.selectedItemMainDes?.uRL,
-              itemMainDescription:
-                  state.selectedItemMainDes?.itemMainDescription ?? '',
+              imageUrl: state.selectedItemMainDes?.itemURL,
+              productDescription:
+                  state.selectedItemMainDes?.productDescription ?? '',
               width: 130,
               height: 130,
             ),
@@ -287,7 +286,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
             borderRadius: BorderRadius.circular(6),
           ),
           child: Text(
-            state.selectedItemMainDes?.itemCategory1Description ?? '',
+            state.selectedItemMainDes?.itemCategoryDescription1 ?? '',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: AppColors.infoColor,
               fontSize: 14,
@@ -297,7 +296,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
         ),
         const SizedBox(height: 5),
         Text(
-          state.selectedItemMainDes?.itemMainDescription ?? '',
+          state.selectedItemMainDes?.productDescription ?? '',
           style: labelStyle?.copyWith(
             fontWeight: FontWeight.w500,
             fontSize: 15,
@@ -348,7 +347,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                           const SizedBox(width: 4),
                           Text(
                             _formatNumber(
-                              state.selectedItemMainDes?.priceSellingUM ?? 0,
+                              state.selectedItemMainDes?.conversion ?? 0,
                             ),
                             style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(
@@ -570,7 +569,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
     if (quantity != null && quantity > 0) {
       final cubit = context.read<ProductsCubit>();
       final state = cubit.state;
-      final imageUrl = state.selectedItemMainDes?.uRL;
+      final imageUrl = state.selectedItemMainDes?.itemURL;
 
       cubit.updateSelectedQuantity(quantity);
       cubit.addToCart(keepSelection: true);

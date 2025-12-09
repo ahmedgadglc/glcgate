@@ -34,8 +34,7 @@ class _ProductCardState extends State<ProductCard> {
       builder: (context, state) {
         // Check if this item is in cart and count distinct items
         final matchingCartItems = state.cartItems.where((cartItem) {
-          return cartItem.itemMainDescription ==
-              widget.item.itemMainDescription;
+          return cartItem.productDescription == widget.item.productDescription;
         }).toList();
 
         final isInCart = matchingCartItems.isNotEmpty;
@@ -47,7 +46,7 @@ class _ProductCardState extends State<ProductCard> {
             borderRadius: BorderRadius.circular(12),
             onTap: () {
               // Set selected item for AddProductCardView
-              context.read<ProductsCubit>().setSelectItemMainDescription(
+              context.read<ProductsCubit>().setSelectproductDescription(
                 widget.item,
               );
 
@@ -79,8 +78,8 @@ class _ProductCardState extends State<ProductCard> {
                         tag:
                             'product-${widget.item.itemCode ?? widget.item.itemID}',
                         child: ProductImageCard(
-                          imageUrl: widget.item.uRL,
-                          itemMainDescription: widget.item.itemMainDescription,
+                          imageUrl: widget.item.itemURL,
+                          productDescription: widget.item.productDescription,
                           width: context.isDesktop ? 142 : 120,
                           height: context.isDesktop ? 142 : 120,
                         ),
@@ -89,7 +88,7 @@ class _ProductCardState extends State<ProductCard> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: Text(
-                            widget.item.itemMainDescription ?? '',
+                            widget.item.productDescription ?? '',
                             style: Theme.of(context).textTheme.titleSmall
                                 ?.copyWith(
                                   color: AppColors.greyColor,

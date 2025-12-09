@@ -3,12 +3,13 @@ import 'package:glcgate/features/products/presentation/widgets/product_grid/cate
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../data/models/product_item.dart';
+
 class ProductLoadingGrid extends StatelessWidget {
   const ProductLoadingGrid({super.key});
 
   @override
   Widget build(BuildContext context) {
-   final groupedItems = _generateDummyData();
+    final groupedItems = _generateDummyData();
     final categories = groupedItems.keys.toList()..sort();
 
     return Skeletonizer(
@@ -18,13 +19,15 @@ class ProductLoadingGrid extends StatelessWidget {
         itemBuilder: (context, categoryIndex) {
           final category = categories[categoryIndex];
           final categoryItems = groupedItems[category]!;
-          return CategorySection(categoryItems: categoryItems, category: category);
+          return CategorySection(
+            categoryItems: categoryItems,
+            category: category,
+          );
         },
       ),
     );
   }
 
-  
   Map<String, List<ProductItem>> _generateDummyData() {
     final categories = [
       'Interior Paints',
@@ -44,15 +47,14 @@ class ProductLoadingGrid extends StatelessWidget {
         ProductItem(
           itemID: i,
           itemCode: 'CODE$i',
-          itemMainDescription: 'Product $i',
-          itemDescription: 'Description $i',
-          priceSellingUM: 100.0 + i,
-          itemCategory1Description: category,
-          uRL: '',
+          productDescription: 'Product $i',
+          eRPItemDescription: 'Description $i',
+          conversion: 100 + i,
+          itemCategoryDescription1: category,
+          itemURL: '',
         ),
       );
     }
     return grouped;
   }
-
 }

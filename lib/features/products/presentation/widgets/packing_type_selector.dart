@@ -4,10 +4,7 @@ import 'package:glcgate/core/theme/app_colors.dart';
 import 'package:glcgate/features/products/presentation/cubit/products_cubit.dart';
 
 Widget _divider() {
-  return Divider(
-    color: AppColors.grey,
-    thickness: .2,
-  );
+  return Divider(color: AppColors.grey, thickness: .2);
 }
 
 Widget _title(String title, BuildContext context) {
@@ -15,9 +12,9 @@ Widget _title(String title, BuildContext context) {
     padding: const EdgeInsets.symmetric(horizontal: 8.0),
     child: Text(
       title,
-      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: AppColors.grey,
-          ),
+      style: Theme.of(
+        context,
+      ).textTheme.titleMedium?.copyWith(color: AppColors.grey),
     ),
   );
 }
@@ -57,9 +54,10 @@ class PackingTypeSelector extends StatelessWidget {
                   final isSelected = state.selectedPackType == type;
                   return InkWell(
                     onTap: () {
-                      context
-                          .read<ProductsCubit>()
-                          .setProductFilter(ProductFilterType.packType, type);
+                      context.read<ProductsCubit>().setProductFilter(
+                        ProductFilterType.packType,
+                        type,
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -134,9 +132,10 @@ class BaseTypeSelector extends StatelessWidget {
                   final isSelected = state.selectedBase == type;
                   return InkWell(
                     onTap: () {
-                      context
-                          .read<ProductsCubit>()
-                          .setProductFilter(ProductFilterType.base, type);
+                      context.read<ProductsCubit>().setProductFilter(
+                        ProductFilterType.base,
+                        type,
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -159,8 +158,9 @@ class BaseTypeSelector extends StatelessWidget {
                         type,
                         style: TextStyle(
                           fontSize: 12,
-                          fontWeight:
-                              isSelected ? FontWeight.bold : FontWeight.normal,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                           color: isSelected ? Colors.white : Colors.black87,
                           fontFamily: 'Cairo',
                         ),
@@ -237,8 +237,8 @@ class ColorsTypeSelector extends StatelessWidget {
                   if (selectedItem != null) {
                     final matchingItem = state.items.firstWhere(
                       (item) =>
-                          item.itemMainDescription ==
-                              selectedItem.itemMainDescription &&
+                          item.productDescription ==
+                              selectedItem.productDescription &&
                           item.color == color &&
                           item.rGB != null,
                       orElse: () => selectedItem,
@@ -322,4 +322,3 @@ class ColorsTypeSelector extends StatelessWidget {
     );
   }
 }
-

@@ -90,9 +90,9 @@ class ProductsCubit extends Cubit<ProductsState> {
     // Get categories2 based on selected category1
     final List<String> categories2 = state.items
         .where((productItem) {
-          return productItem.itemCategory1Description == category;
+          return productItem.itemCategoryDescription1 == category;
         })
-        .map((productItem) => productItem.itemCategory2Description ?? '')
+        .map((productItem) => productItem.itemCategoryDescription2 ?? '')
         .where((category2) => category2.isNotEmpty)
         .toSet()
         .toList();
@@ -131,8 +131,8 @@ class ProductsCubit extends Cubit<ProductsState> {
 
   // ==================== Product Selection Methods ====================
 
-  /// Set selected item by itemMainDescription - for AddProductCardView
-  void setSelectItemMainDescription(ProductItem? item) {
+  /// Set selected item by productDescription - for AddProductCardView
+  void setSelectproductDescription(ProductItem? item) {
     if (item == null) {
       emit(
         state.copyWith(
@@ -149,7 +149,7 @@ class ProductsCubit extends Cubit<ProductsState> {
     }
 
     // Get packing types for this item
-    final packTypes = getPackingTypes(item.itemMainDescription);
+    final packTypes = getPackingTypes(item.productDescription);
 
     emit(
       state.copyWith(
@@ -189,7 +189,7 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     // Get bases for this packing type
     final bases = getBaseTypes(
-      state.selectedItemMainDes!.itemMainDescription,
+      state.selectedItemMainDes!.productDescription,
       packType,
     );
 
@@ -209,7 +209,7 @@ class ProductsCubit extends Cubit<ProductsState> {
     } else if (bases.isEmpty) {
       // No bases, check for colors directly
       final colors = getColorsTypes(
-        state.selectedItemMainDes!.itemMainDescription,
+        state.selectedItemMainDes!.productDescription,
         packType,
         null,
       );
@@ -229,7 +229,7 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     // Get colors for this base
     final colors = getColorsTypes(
-      state.selectedItemMainDes!.itemMainDescription,
+      state.selectedItemMainDes!.productDescription,
       state.selectedPackType,
       base,
     );
@@ -272,27 +272,27 @@ class ProductsCubit extends Cubit<ProductsState> {
     }
   }
 
-  /// Get packing types for itemMainDescription
-  List<String> getPackingTypes(String? itemMainDescription) {
-    if (itemMainDescription == null) return [];
+  /// Get packing types for productDescription
+  List<String> getPackingTypes(String? productDescription) {
+    if (productDescription == null) return [];
 
     return state.items
-        .where((item) => item.itemMainDescription == itemMainDescription)
-        .map((item) => item.packingType ?? '')
+        .where((item) => item.productDescription == productDescription)
+        .map((item) => item.packingDescription ?? '')
         .where((p) => p.isNotEmpty)
         .toSet()
         .toList();
   }
 
-  /// Get base types for itemMainDescription and packingType
-  List<String> getBaseTypes(String? itemMainDescription, String? packingType) {
-    if (itemMainDescription == null) return [];
+  /// Get base types for productDescription and packingType
+  List<String> getBaseTypes(String? productDescription, String? packingType) {
+    if (productDescription == null) return [];
 
     return state.items
         .where(
           (item) =>
-              item.itemMainDescription == itemMainDescription &&
-              (packingType == null || item.packingType == packingType),
+              item.productDescription == productDescription &&
+              (packingType == null || item.packingDescription == packingType),
         )
         .map((item) => item.base ?? '')
         .where((b) => b.isNotEmpty)
@@ -300,19 +300,19 @@ class ProductsCubit extends Cubit<ProductsState> {
         .toList();
   }
 
-  /// Get color types for itemMainDescription, packingType, and base
+  /// Get color types for productDescription, packingType, and base
   List<String> getColorsTypes(
-    String? itemMainDescription,
+    String? productDescription,
     String? packingType,
     String? base,
   ) {
-    if (itemMainDescription == null) return [];
+    if (productDescription == null) return [];
 
     return state.items
         .where(
           (item) =>
-              item.itemMainDescription == itemMainDescription &&
-              (packingType == null || item.packingType == packingType) &&
+              item.productDescription == productDescription &&
+              (packingType == null || item.packingDescription == packingType) &&
               (base == null || base.isEmpty || item.base == base),
         )
         .map((item) => item.color ?? '')
@@ -327,10 +327,10 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     return state.items.firstWhereOrNull(
       (item) =>
-          item.itemMainDescription ==
-              state.selectedItemMainDes!.itemMainDescription &&
+          item.productDescription ==
+              state.selectedItemMainDes!.productDescription &&
           (state.selectedPackType == null ||
-              item.packingType == state.selectedPackType) &&
+              item.packingDescription == state.selectedPackType) &&
           (state.selectedBase == null ||
               state.selectedBase!.isEmpty ||
               item.base == state.selectedBase) &&
@@ -481,7 +481,7 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     for (final item in state.cartItems) {
       totalAmount += item.amount ?? 0;
-      gateTotalAmount += item.gateAmount ?? 0;
+      gateTotalAmount += item.amount ?? 0;
       totalWeight += item.wieght ?? 0;
     }
 
@@ -506,7 +506,7 @@ class ProductsCubit extends Cubit<ProductsState> {
 
   List<String> _extractUniqueCategories1(List<ProductItem> items) {
     final categories = items
-        .map((item) => item.itemCategory1Description)
+        .map((item) => item.itemCategoryDescription1)
         .where((cat) => cat != null && cat.isNotEmpty)
         .cast<String>()
         .toSet()
@@ -521,14 +521,14 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     if (state.selectedCategory1 != null && state.selectedCategory1 != 'الكل') {
       filtered = filtered.where((item) {
-        return item.itemCategory1Description == state.selectedCategory1;
+        return item.itemCategoryDescription1 == state.selectedCategory1;
       }).toList();
     }
 
     // Apply category2 filter if selected
     if (state.selectedCategory2 != null && state.selectedCategory2 != 'الكل') {
       filtered = filtered.where((item) {
-        return item.itemCategory2Description == state.selectedCategory2;
+        return item.itemCategoryDescription2 == state.selectedCategory2;
       }).toList();
     }
 
@@ -537,9 +537,9 @@ class ProductsCubit extends Cubit<ProductsState> {
       filtered = _performSearch(filtered, state.searchQuery);
     }
 
-    // Group by itemMainDescription to avoid duplicates
+    // Group by productDescription to avoid duplicates
     final groupedData = groupBy(filtered, (ProductItem e) {
-      return e.itemMainDescription ?? '';
+      return e.productDescription ?? '';
     });
 
     return groupedData.entries.map<ProductItem>((entry) {
@@ -559,14 +559,14 @@ class ProductsCubit extends Cubit<ProductsState> {
 
     return items.where((item) {
       final searchableText = [
-        item.itemMainDescription?.toLowerCase() ?? '',
-        item.itemDescription?.toLowerCase() ?? '',
+        item.productDescription?.toLowerCase() ?? '',
+        item.productDescription?.toLowerCase() ?? '',
         item.itemCode?.toLowerCase() ?? '',
-        item.packingType?.toLowerCase() ?? '',
+        item.packingDescription?.toLowerCase() ?? '',
         item.base?.toLowerCase() ?? '',
         item.color?.toLowerCase() ?? '',
-        item.itemCategory1Description?.toLowerCase() ?? '',
-        item.itemCategory2Description?.toLowerCase() ?? '',
+        item.itemCategoryDescription1?.toLowerCase() ?? '',
+        item.itemCategoryDescription2?.toLowerCase() ?? '',
       ].join(' ');
 
       return searchTerms.any((term) => searchableText.contains(term));
@@ -575,7 +575,7 @@ class ProductsCubit extends Cubit<ProductsState> {
 
   Map<String, List<ProductItem>> get groupedByCategory {
     final grouped = groupBy(filteredItems, (item) {
-      return item.itemCategory1Description ?? 'غير مصنف';
+      return item.itemCategoryDescription1 ?? 'غير مصنف';
     });
 
     // Sort categories

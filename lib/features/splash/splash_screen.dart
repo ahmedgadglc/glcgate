@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted) {
       Navigator.pushReplacement(
         context,
-        FadePageRoute(child: const LoginScreen()),
+        FadePageRoute(child: const ProductsScreen()),
       );
     }
   }

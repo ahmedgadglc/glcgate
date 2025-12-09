@@ -5,7 +5,7 @@ class ProductsState {
   final List<ProductItem> cartItems;
   final List<String> categories1;
   final List<String> categories2;
-  final List<String> itemMainDescriptionList;
+  final List<String> productDescriptionList;
   final List<String> packTypeList;
   final List<String> baseList;
   final List<String> colorList;
@@ -14,7 +14,7 @@ class ProductsState {
 
   final String? selectedCategory1;
   final String? selectedCategory2;
-  final String? selectedItemMainDescription;
+  final String? selectedproductDescription;
   final String? selectedPackType;
   final String? selectedBase;
   final String? selectedColor;
@@ -37,14 +37,14 @@ class ProductsState {
     required this.cartItems,
     required this.categories1,
     required this.categories2,
-    required this.itemMainDescriptionList,
+    required this.productDescriptionList,
     required this.packTypeList,
     required this.baseList,
     required this.colorList,
     this.selectedItemMainDes,
     this.selectedCategory1,
     this.selectedCategory2,
-    this.selectedItemMainDescription,
+    this.selectedproductDescription,
     this.selectedPackType,
     this.selectedBase,
     this.selectedColor,
@@ -65,7 +65,7 @@ class ProductsState {
     cartItems: [],
     categories1: [],
     categories2: [],
-    itemMainDescriptionList: [],
+    productDescriptionList: [],
     packTypeList: [],
     baseList: [],
     colorList: [],
@@ -95,7 +95,7 @@ class ProductsState {
     List<ProductItem>? cartItems,
     List<String>? categories1,
     List<String>? categories2,
-    List<String>? itemMainDescriptionList,
+    List<String>? productDescriptionList,
     List<String>? packTypeList,
     List<String>? baseList,
     List<String>? colorList,
@@ -103,7 +103,7 @@ class ProductsState {
     bool clearSelectedItem = false,
     String? selectedCategory1,
     String? selectedCategory2,
-    String? selectedItemMainDescription,
+    String? selectedproductDescription,
     String? selectedPackType,
     bool clearPackType = false,
     String? selectedBase,
@@ -126,8 +126,8 @@ class ProductsState {
       cartItems: cartItems ?? this.cartItems,
       categories1: categories1 ?? this.categories1,
       categories2: categories2 ?? this.categories2,
-      itemMainDescriptionList:
-          itemMainDescriptionList ?? this.itemMainDescriptionList,
+      productDescriptionList:
+          productDescriptionList ?? this.productDescriptionList,
       packTypeList: packTypeList ?? this.packTypeList,
       baseList: baseList ?? this.baseList,
       colorList: colorList ?? this.colorList,
@@ -136,8 +136,8 @@ class ProductsState {
           : (selectedItemMainDes ?? this.selectedItemMainDes),
       selectedCategory1: selectedCategory1 ?? this.selectedCategory1,
       selectedCategory2: selectedCategory2 ?? this.selectedCategory2,
-      selectedItemMainDescription:
-          selectedItemMainDescription ?? this.selectedItemMainDescription,
+      selectedproductDescription:
+          selectedproductDescription ?? this.selectedproductDescription,
       selectedPackType: clearPackType
           ? null
           : (selectedPackType ?? this.selectedPackType),
@@ -155,7 +155,6 @@ class ProductsState {
       note: note ?? this.note,
     );
   }
-
 }
 
 enum CategoryFilterType { category1, category2 }
