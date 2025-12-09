@@ -31,7 +31,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
     super.dispose();
   }
 
-  String _formatNumber(int number) {
+  String _formatNumber(double number) {
     if (number == number.toInt()) {
       return number.toInt().toString();
     }
@@ -286,7 +286,8 @@ class _AddProductCardViewState extends State<AddProductCardView> {
                         children: [
                           Text(
                             _formatNumber(
-                              state.selectedItemMainDes?.conversion ?? 0,
+                              (state.selectedItemMainDes?.conversion ?? 0)
+                                  .toDouble(),
                             ),
                             style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(
@@ -314,7 +315,7 @@ class _AddProductCardViewState extends State<AddProductCardView> {
                           const SizedBox(width: 5),
                           Text(
                             _formatNumber(
-                              state.selectedItemMainDes?.grossWeight ?? 0,
+                              state.selectedItemMainDes?.grossWeight ?? 0.0,
                             ),
                             style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(
@@ -492,9 +493,9 @@ class _AddProductCardViewState extends State<AddProductCardView> {
                 const SizedBox(height: 1),
                 Text(
                   _formatNumber(
-                    (state.selectedItemMainDes?.grossWeight ?? 0) *
+                    (state.selectedItemMainDes?.grossWeight ?? 0.0) *
                         quantity *
-                        (state.selectedItemMainDes?.conversion ?? 1),
+                        (state.selectedItemMainDes?.conversion ?? 1).toDouble(),
                   ),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: AppColors.grey,
@@ -536,7 +537,8 @@ class _AddProductCardViewState extends State<AddProductCardView> {
                 const SizedBox(height: 1),
                 Text(
                   _formatNumber(
-                    (state.selectedItemMainDes?.conversion ?? 0) * quantity,
+                    (state.selectedItemMainDes?.conversion ?? 0).toDouble() *
+                        quantity.toDouble(),
                   ),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: AppColors.errorColor,

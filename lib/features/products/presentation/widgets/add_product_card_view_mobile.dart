@@ -62,7 +62,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
     }
   }
 
-  String _formatNumber(int number) {
+  String _formatNumber(double number) {
     if (number == number.toInt()) {
       return number.toInt().toString();
     }
@@ -217,7 +217,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                 FittedBox(
                   child: Text(
                     _formatNumber(
-                      (state.selectedItemMainDes?.conversion ?? 0) * quantity,
+                      (state.selectedItemMainDes?.conversion ?? 0).toDouble() * quantity.toDouble(),
                     ),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: AppColors.errorColor,
@@ -347,7 +347,7 @@ class _AddProductCardViewMobileState extends State<AddProductCardViewMobile>
                           const SizedBox(width: 4),
                           Text(
                             _formatNumber(
-                              state.selectedItemMainDes?.conversion ?? 0,
+                              (state.selectedItemMainDes?.conversion ?? 0).toDouble(),
                             ),
                             style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(

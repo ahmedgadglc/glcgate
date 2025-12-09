@@ -6,7 +6,7 @@ class ProductItem {
   int? packingTypeID;
   String? sellingUM;
   int? conversion;
-  int? grossWeight;
+  double? grossWeight;
   int? itemCategory1;
   int? itemCategory2;
   String? base;
@@ -119,7 +119,7 @@ class ProductItem {
     int? packingTypeID,
     String? sellingUM,
     int? conversion,
-    int? grossWeight,
+    double? grossWeight,
     int? itemCategory1,
     int? itemCategory2,
     String? base,
